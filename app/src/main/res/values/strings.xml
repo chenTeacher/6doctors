@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">仁医</string>
+    <string name="no_data">暂无数据</string>
+    <string name="no_data_num">————</string>
+    <string name="patient_management">患者管理</string>
+    <string name="first_doctor">首次就诊</string>
+    <string name="last_doctor">最近就诊</string>
+    <string name="title_activity_login">LoginActivity</string>
+</resources>
