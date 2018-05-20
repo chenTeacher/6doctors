@@ -13,7 +13,7 @@ import cn.android.a6doctors.view.AddPatientView;
 public class AddPatientPresenter {
     AddPatientModel iMoudel;
     AddPatientView iView;
-    Context mContext;
+        Context mContext;
 
     public AddPatientPresenter(AddPatientModel iMoudel, AddPatientView iView, Context mContext) {
         this.iMoudel = iMoudel;

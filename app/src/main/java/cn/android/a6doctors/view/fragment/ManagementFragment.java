@@ -136,6 +136,9 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     PatientAdapter patientAdapter;
     Patient_Case_Collection_Adapter patientInfoAdapter;
 
+
+
+
     public ManagementFragment() {
         // Required empty public constructor
     }
