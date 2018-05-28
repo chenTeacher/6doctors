@@ -1,5 +1,6 @@
 package cn.android.a6doctors.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.foamtrace.photopicker.ImageCaptureManager;
+import com.foamtrace.photopicker.PhotoPickerActivity;
+import com.foamtrace.photopicker.PhotoPreviewActivity;
+import com.foamtrace.photopicker.SelectModel;
+import com.foamtrace.photopicker.intent.PhotoPickerIntent;
+import com.foamtrace.photopicker.intent.PhotoPreviewIntent;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -22,10 +32,13 @@ import cn.addapp.pickers.picker.NumberPicker;
 import cn.addapp.pickers.picker.SinglePicker;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.model.AddPatientImpl;
 import cn.android.a6doctors.presenter.AddPatientPresenter;
 import cn.android.a6doctors.util.AddressPickTask;
+import cn.android.a6doctors.util.AppSharePreferenceMgr;
+import cn.android.a6doctors.util.LogUtil;
 
 /**
  * 添加患者信息Activity
@@ -55,8 +68,20 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
     Button addPatientPortraitBtn;
     @BindView(R.id.save)
     Button save;
+    @BindView(R.id.identityType)
+    Button identityType;
 
     private AddPatientPresenter presenter;
+
+    private Patient patient;
+
+    private ArrayList<String> imagePaths = null;
+    private static final int REQUEST_CAMERA_CODE = 114;
+    private static final int REQUEST_PREVIEW_CODE = 115;
+    private ImageCaptureManager captureManager; // 相机拍照处理类
+
+    private String token;
+    private Doctor doctor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,25 +89,24 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
         setContentView(R.layout.activity_add_patient);
         ButterKnife.bind(this);
         presenter = new AddPatientPresenter(new AddPatientImpl(), this, this);
+        token = (String) AppSharePreferenceMgr.get(this,"token","");
+        doctor = getIntent().getBundleExtra("doctor").getParcelable("doctor");
         initView();
     }
 
     /*初始化组件*/
     @Override
     public void initView() {
+        patient = new Patient();
         closeBtn.setOnClickListener(this);
         patientAge.setOnClickListener(this);
         patientSex.setOnClickListener(this);
+        addPatientPortraitBtn.setOnClickListener(this);
         patientSelectLocalBtn.setOnClickListener(this);
-    }
+        save.setOnClickListener(this);
+        identityType.setOnClickListener(this);
 
-    /**
-     * 关闭activity
-     */
-    private void closeActivty() {
-        finish();
     }
-
 
     @Override
     public void goBack() {
@@ -116,6 +140,7 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
             @Override
             public void onItemPicked(int index, String item) {
                 patientSex.setText(item);
+                patient.setGender(item);
             }
         });
         picker.show();
@@ -137,6 +162,7 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
             public void onNumberPicked(int index, Number item) {
 //                showToast("index=" + index + ", item=" + item.intValue());
                 patientAge.setText(Integer.toString(item.intValue()));
+                patient.setAge(item.intValue());
 
             }
         });
@@ -163,24 +189,93 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
                 } else {
                     s = province.getAreaName() + city.getAreaName() + county.getAreaName();
                 }
-                Toast.makeText(getApplication(), s, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplication(), s, Toast.LENGTH_LONG).show();
                 patientLocal.setText(s);
+                patient.setAddress(s);
             }
         });
         task.execute("北京", "北京", "东城");
     }
 
     @Override
-    public void photoSelector() {
+    public void selectIdentityType() {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("身份证");
+        SinglePicker<String> picker = new SinglePicker<String>(this, list);
+        picker.setCanLoop(false);//不禁用循环
+        picker.setLineVisible(true);
+        picker.setShadowVisible(true);
+        picker.setTextSize(18);
+        picker.setSelectedIndex(0);
+        picker.setWheelModeEnable(true);
+        //启用权重 setWeightWidth 才起作用
+        picker.setLabel("");
+        picker.setWeightEnable(true);
+        picker.setWeightWidth(1);
+        picker.setSelectedTextColor(0xFF279BAA);//前四位值是透明度
+        picker.setUnSelectedTextColor(0xFF999999);
+        picker.setOnSingleWheelListener(new OnSingleWheelListener() {
+            @Override
+            public void onWheeled(int index, String item) {
+            }
+        });
+        picker.setOnItemPickListener(new OnItemPickListener<String>() {
+            @Override
+            public void onItemPicked(int index, String item) {
+                identityType.setText(item);
+                patient.setIdentityType(item);
+            }
+        });
+        picker.show();
+    }
 
+    @Override
+    public void photoSelector() {
+        if(imagePaths == null){
+            imagePaths = new ArrayList<String>();
+        }
+        if (imagePaths.size()==0) {
+            add_patient_capture();
+        } else {
+            PhotoPreviewIntent intent = new PhotoPreviewIntent(AddPatientActivity.this);
+            intent.setCurrentItem(0);
+            intent.setPhotoPaths(imagePaths);
+            startActivityForResult(intent, REQUEST_PREVIEW_CODE);
+        }
     }
 
     @Override
     public void save() {
 
     }
-
-
+    private void add_patient_capture() {
+        PhotoPickerIntent intent1 = new PhotoPickerIntent(AddPatientActivity.this);
+        intent1.setSelectModel(SelectModel.MULTI);
+        intent1.setShowCarema(true); // 是否显示拍照
+        intent1.setMaxTotal(1); // 最多选择照片数量，默认为9
+        intent1.setSelectedPaths(imagePaths); // 已选中的照片地址， 用于回显选中状态
+        startActivityForResult(intent1, REQUEST_CAMERA_CODE);
+    }
+    private void loadAdpater(ArrayList<String> paths) {
+        if (imagePaths == null) {
+            imagePaths = new ArrayList<String>();
+        }
+        imagePaths.clear();
+        imagePaths.addAll(paths);
+        patient.setPhotoPath("");
+        File file =null;
+        if (imagePaths.size()>0){
+            file = new File(imagePaths.get(0));
+            patient.setPhotoPath(imagePaths.get(0));
+        }
+        Glide.with(AddPatientActivity.this)
+                .load(file)
+                .placeholder(R.drawable.main_person_image)
+                .error(R.drawable.main_person_image)
+                .centerCrop()
+                .crossFade()
+                .into(patientPortrait);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -196,9 +291,47 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
             case R.id.patient_select_local_btn:
                 presenter.selectAddress();
                 break;
-            case R.id.save:
-                presenter.save(new Patient());
+            case R.id.add_patient_portrait_btn:
+                presenter.photoSelector();
                 break;
+            case R.id.identityType:
+                presenter.selectIdentityType();
+                break;
+            case R.id.save:
+                LogUtil.I(this, patient.toString());
+                patient.setPatientName(patientName.getText().toString());
+                patient.setMobPhone(patientPhone.getText().toString());
+                patient.setIdentityNum(patientCard.getText().toString());
+                patient.setPlace(patientLocalInfo.getText().toString());
+                LogUtil.I(this, patient.toString());
+                presenter.save(doctor,token,patient);
+                break;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                // 选择照片
+                case REQUEST_CAMERA_CODE:
+                    loadAdpater(data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT));
+                    break;
+                //浏览照片
+                case REQUEST_PREVIEW_CODE:
+                    loadAdpater(data.getStringArrayListExtra(PhotoPreviewActivity.EXTRA_RESULT));
+                    break;
+                // 调用相机拍照
+                case ImageCaptureManager.REQUEST_TAKE_PHOTO:
+                    if (captureManager.getCurrentPhotoPath() != null) {
+                        captureManager.galleryAddPic();
+                        ArrayList<String> paths = new ArrayList<String>();
+                        paths.add(captureManager.getCurrentPhotoPath());
+                        loadAdpater(paths);
+                    }
+                    break;
+
+            }
         }
     }
 }

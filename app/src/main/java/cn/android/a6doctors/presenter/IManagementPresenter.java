@@ -7,6 +7,7 @@ import java.util.List;
 
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.bean.Patient_Case;
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.model.IManagementModel;
 import cn.android.a6doctors.view.fragment.IManagementView;
 
@@ -18,6 +19,18 @@ public class IManagementPresenter {
     IManagementModel iManagementModel;
     IManagementView iManagementView;
     Context mContext;
+
+    String token;
+    int doctorId;
+
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
+    }
 
     public IManagementPresenter(Context context, IManagementModel iManagementModel, IManagementView iManagementView){
         this.mContext = context;
@@ -85,9 +98,9 @@ public class IManagementPresenter {
      * 刷新数据
      */
     public void refreshData(){
-        iManagementModel.getPatientList("10000",new Patient.CallBack() {
+        iManagementModel.getPatientList(token,doctorId,new CallBack() {
             @Override
-            public void onSuccess(List data) {
+            public void onSuccess(Object data) {
                 iManagementView.refreshDataOnSuccess(data);
             }
 
@@ -110,28 +123,7 @@ public class IManagementPresenter {
     }
     /***/
     public void loadMoreData(){
-        iManagementModel.getPatientList("10000", new Patient.CallBack() {
-            @Override
-            public void onSuccess(List data) {
-                iManagementView.loadMoreDataOnSuccess(data);
-            }
 
-            @Override
-            public void onFailure(String msg) {
-                iManagementView.refreshDataOnFailure("");
-            }
-
-            @Override
-            public void onError() {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-        });
 
     }
 }

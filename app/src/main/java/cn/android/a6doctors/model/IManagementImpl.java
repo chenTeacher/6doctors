@@ -8,6 +8,7 @@ import java.util.List;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.bean.Patient_Case;
 import cn.android.a6doctors.bean.Patient_Case_Collection;
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.factory.APIFactoryImpl;
 
 /**
@@ -20,8 +21,8 @@ public class IManagementImpl implements IManagementModel{
         apiFactory = APIFactoryImpl.getInstance();
     }
     @Override
-    public void getPatientList(final String doctorId, final Patient.CallBack callback) {
-        apiFactory.getPatientList(doctorId,callback);
+    public void getPatientList(String token,int doctorId,CallBack callback) {
+        apiFactory.getPatientList(token,doctorId,callback);
     }
 
     @Override

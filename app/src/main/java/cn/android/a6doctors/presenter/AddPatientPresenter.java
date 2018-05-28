@@ -2,6 +2,7 @@ package cn.android.a6doctors.presenter;
 
 import android.content.Context;
 
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.model.AddPatientModel;
 import cn.android.a6doctors.view.AddPatientView;
@@ -11,9 +12,9 @@ import cn.android.a6doctors.view.AddPatientView;
  */
 
 public class AddPatientPresenter {
-    AddPatientModel iMoudel;
-    AddPatientView iView;
-        Context mContext;
+    private AddPatientModel iMoudel;
+    private AddPatientView iView;
+    private Context mContext;
 
     public AddPatientPresenter(AddPatientModel iMoudel, AddPatientView iView, Context mContext) {
         this.iMoudel = iMoudel;
@@ -51,7 +52,12 @@ public class AddPatientPresenter {
     public void  selectAge(){
         iView.selectAge();
     }
-
+    /**
+     * 选择证件类型
+     */
+    public void selectIdentityType(){
+        iView.selectIdentityType();
+    };
     /**
      * 拍照
      */
@@ -63,8 +69,8 @@ public class AddPatientPresenter {
     /**
      * 保存信息
      */
-    public void save(Patient patient) {
-        iMoudel.updataPatient(patient);
+    public void save(Doctor doctor, String token, Patient patient) {
+        iMoudel.createPatient(doctor,token,patient);
     }
 
     /**

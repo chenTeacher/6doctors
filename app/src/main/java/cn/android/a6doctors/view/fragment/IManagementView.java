@@ -51,7 +51,7 @@ public interface IManagementView {
     /**
      * 下拉刷新成功的操作
      */
-    void  refreshDataOnSuccess(List data);
+    void  refreshDataOnSuccess(Object data);
     /**
      * 下拉刷新失败的操作
      */

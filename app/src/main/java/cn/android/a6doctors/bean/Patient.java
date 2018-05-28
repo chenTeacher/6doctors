@@ -10,90 +10,124 @@ import java.util.List;
  */
 
 public class Patient implements Parcelable {
-    /**患者Id*/
-    private String patient_id;
-    /**姓名*/
-    private String patient_name;
-    /**病症*/
-    private String patient_disease;
-    /**就诊状态*/
-    private String patient_state;
-    /**就诊意愿*/
-    private String patient_intention;
-    /**头像*/
-    private String patient_portrait;
+
+
+    //患者id
+        private Integer patientId;
+        //患者姓名
+        private String patientName;
+        //性别
+        private String gender;
+        //手机号
+        private String mobPhone;
+        //年龄
+        private Integer age;
+        //证件类型
+        private String identityType;
+        //证件号码
+        private String identityNum;
+        //地址
+        private String address;
+        //地方
+        private String place;
+        //照片地址
+        private String photoPath;
+
 
     public Patient() {
-
     }
 
-    public Patient(String patient_id, String patient_name, String patient_disease, String patient_state, String patient_intention, String patient_portrait) {
-        this.patient_id = patient_id;
-        this.patient_name = patient_name;
-        this.patient_disease = patient_disease;
-        this.patient_state = patient_state;
-        this.patient_intention = patient_intention;
-        this.patient_portrait = patient_portrait;
+    public Patient(Integer patientId, String patientName, String gender, String mobPhone, Integer age, String identityType, String identityNum, String address, String place, String photoPath) {
+        this.patientId = patientId;
+        this.patientName = patientName;
+        this.gender = gender;
+        this.mobPhone = mobPhone;
+        this.age = age;
+        this.identityType = identityType;
+        this.identityNum = identityNum;
+        this.address = address;
+        this.place = place;
+        this.photoPath = photoPath;
     }
 
-    public String getPatient_id() {
-
-        return patient_id;
+    public Integer getPatientId() {
+        return patientId;
     }
 
-    public void setPatient_id(String patient_id) {
-        this.patient_id = patient_id;
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
 
-    public String getPatient_name() {
-        return patient_name;
+    public String getPatientName() {
+        return patientName;
     }
 
-    public void setPatient_name(String patient_name) {
-        this.patient_name = patient_name;
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 
-    public String getPatient_disease() {
-        return patient_disease;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPatient_disease(String patient_disease) {
-        this.patient_disease = patient_disease;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getPatient_state() {
-        return patient_state;
+    public String getMobPhone() {
+        return mobPhone;
     }
 
-    public void setPatient_state(String patient_state) {
-        this.patient_state = patient_state;
+    public void setMobPhone(String mobPhone) {
+        this.mobPhone = mobPhone;
     }
 
-    public String getPatient_intention() {
-        return patient_intention;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setPatient_intention(String patient_intention) {
-        this.patient_intention = patient_intention;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public String getPatient_portrait() {
-        return patient_portrait;
+    public String getIdentityType() {
+        return identityType;
     }
 
-    public void setPatient_portrait(String patient_portrait) {
-        this.patient_portrait = patient_portrait;
+    public void setIdentityType(String identityType) {
+        this.identityType = identityType;
     }
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "patient_id='" + patient_id + '\'' +
-                ", patient_name='" + patient_name + '\'' +
-                ", patient_disease='" + patient_disease + '\'' +
-                ", patient_state='" + patient_state + '\'' +
-                ", patient_intention='" + patient_intention + '\'' +
-                ", patient_portrait='" + patient_portrait + '\'' +
-                '}';
+
+    public String getIdentityNum() {
+        return identityNum;
+    }
+
+    public void setIdentityNum(String identityNum) {
+        this.identityNum = identityNum;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     @Override
@@ -103,21 +137,29 @@ public class Patient implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.patient_id);
-        dest.writeString(this.patient_name);
-        dest.writeString(this.patient_disease);
-        dest.writeString(this.patient_state);
-        dest.writeString(this.patient_intention);
-        dest.writeString(this.patient_portrait);
+        dest.writeValue(this.patientId);
+        dest.writeString(this.patientName);
+        dest.writeString(this.gender);
+        dest.writeString(this.mobPhone);
+        dest.writeValue(this.age);
+        dest.writeString(this.identityType);
+        dest.writeString(this.identityNum);
+        dest.writeString(this.address);
+        dest.writeString(this.place);
+        dest.writeString(this.photoPath);
     }
 
     protected Patient(Parcel in) {
-        this.patient_id = in.readString();
-        this.patient_name = in.readString();
-        this.patient_disease = in.readString();
-        this.patient_state = in.readString();
-        this.patient_intention = in.readString();
-        this.patient_portrait = in.readString();
+        this.patientId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.patientName = in.readString();
+        this.gender = in.readString();
+        this.mobPhone = in.readString();
+        this.age = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.identityType = in.readString();
+        this.identityNum = in.readString();
+        this.address = in.readString();
+        this.place = in.readString();
+        this.photoPath = in.readString();
     }
 
     public static final Parcelable.Creator<Patient> CREATOR = new Parcelable.Creator<Patient>() {
@@ -131,26 +173,19 @@ public class Patient implements Parcelable {
             return new Patient[size];
         }
     };
-
-    public interface CallBack{
-        /**
-         * 数据请求成功
-         */
-        public abstract void onSuccess(List data);
-        /**
-         *  使用网络API接口请求方式时，虽然已经请求成功但是由
-         *  于{@code msg}的原因无法正常返回数据。
-         */
-        public abstract void onFailure(String msg);
-        /**
-         * 请求数据失败，指在请求网络API接口请求方式时，出现无法联网、
-         * 缺少权限，内存泄露等原因导致无法连接到请求数据源。
-         */
-        public abstract void onError();
-        /**
-         * 当请求数据结束时，无论请求结果是成功，失败或是抛出异常都会执行此方法给用户做处理，通常做网络
-         * 请求时可以在此处隐藏“正在加载”的等待控件
-         */
-        public abstract void onComplete();
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "patientId=" + patientId +
+                ", patientName='" + patientName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", mobPhone='" + mobPhone + '\'' +
+                ", age=" + age +
+                ", identityType='" + identityType + '\'' +
+                ", identityNum='" + identityNum + '\'' +
+                ", address='" + address + '\'' +
+                ", place='" + place + '\'' +
+                ", photoPath='" + photoPath + '\'' +
+                '}';
     }
 }

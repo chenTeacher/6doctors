@@ -67,14 +67,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.patient_name.setText(data.get(position).getPatient_name());
-        holder.patient_disease_state.setText(data.get(position).getPatient_disease()+"-"+data.get(position).getPatient_state());
-        holder.patient_intention.setText(data.get(position).getPatient_intention());
-        Glide.with(mContext)
-                .load(data.get(position).getPatient_portrait())
-                .placeholder(R.drawable.main_person_image)//图片加载出来前，显示的图片
-                .error(R.drawable.main_person_image)//图片加载失败后，显示的图片
-                .into(holder.personImage);
+//        holder.patient_name.setText(data.get(position).getPatient_name());
+//        holder.patient_disease_state.setText(data.get(position).getPatient_disease()+"-"+data.get(position).getPatient_state());
+//        holder.patient_intention.setText(data.get(position).getPatient_intention());
+//        Glide.with(mContext)
+//                .load(data.get(position).getPatient_portrait())
+//                .placeholder(R.drawable.main_person_image)//图片加载出来前，显示的图片
+//                .error(R.drawable.main_person_image)//图片加载失败后，显示的图片
+//                .into(holder.personImage);
     }
 
     @Override

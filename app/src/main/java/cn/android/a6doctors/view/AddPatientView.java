@@ -23,6 +23,10 @@ public interface AddPatientView {
      */
     void selectAddress();
     /**
+     * 选择证件类型
+     */
+    void selectIdentityType();
+    /**
      * 拍照
      */
     void photoSelector();

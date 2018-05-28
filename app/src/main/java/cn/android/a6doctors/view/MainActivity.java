@@ -1,7 +1,9 @@
 package cn.android.a6doctors.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.view.fragment.ManagementFragment;
 
 public class MainActivity extends BaseActivity implements ManagementFragment.OnFragmentInteractionListener{
@@ -28,6 +31,9 @@ public class MainActivity extends BaseActivity implements ManagementFragment.OnF
 
     //Tab选项卡的文字
     private String mTextviewArray[] = {"首页"};
+
+    //医生的信息
+    private Doctor doctor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

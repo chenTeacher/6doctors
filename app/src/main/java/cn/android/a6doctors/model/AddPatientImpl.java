@@ -1,5 +1,6 @@
 package cn.android.a6doctors.model;
 
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.factory.APIFactoryImpl;
 
@@ -15,7 +16,7 @@ public class AddPatientImpl implements AddPatientModel {
     }
 
     @Override
-    public void updataPatient(Patient patient) {
-
+    public void createPatient(Doctor doctor, String token, Patient patient) {
+        apiFactory.createPatient(doctor,token,patient);
     }
 }

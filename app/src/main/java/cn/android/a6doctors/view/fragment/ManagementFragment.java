@@ -32,11 +32,13 @@ import cn.android.a6doctors.R;
 import cn.android.a6doctors.adapter.PatientAdapter;
 import cn.android.a6doctors.adapter.Patient_Case_Collection_Adapter;
 
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.bean.Patient_Case;
 import cn.android.a6doctors.bean.Patient_Case_Collection;
 import cn.android.a6doctors.model.IManagementImpl;
 import cn.android.a6doctors.presenter.IManagementPresenter;
+import cn.android.a6doctors.util.AppSharePreferenceMgr;
 import cn.android.a6doctors.util.LogUtil;
 import cn.android.a6doctors.util.REQUEST_CODE;
 import cn.android.a6doctors.util.SpacesItemDecoration;
@@ -137,7 +139,8 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     Patient_Case_Collection_Adapter patientInfoAdapter;
 
 
-
+    private String token;
+    private Doctor doctor;
 
     public ManagementFragment() {
         // Required empty public constructor
@@ -161,6 +164,8 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        doctor = getActivity().getIntent().getBundleExtra("doctor").getParcelable("doctor");
+        token = (String) AppSharePreferenceMgr.get(mContext,"token","");
     }
 
     @Override
@@ -177,7 +182,8 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
 
         initView(mCacheView);
         presenter = new IManagementPresenter(mContext, new IManagementImpl(), this);
-
+        presenter.setDoctorId(doctor.getDoctorId());
+        presenter.setToken(token);
         return mCacheView;
 
     }
@@ -203,8 +209,6 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     @Override
     public void onStart() {
         super.onStart();
-//        presenter.getPatientList();
-
     }
 
     @Override
@@ -241,7 +245,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         patientAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int data) {
-                presenter.getPatientInfo();
+//                presenter.getPatientInfo();
             }
         });
         patientListView.setAdapter(patientAdapter);
@@ -371,7 +375,8 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     public void addPatientInfo() {
         Intent intent = new Intent(this.mContext, AddPatientActivity.class);
         Bundle bundle = new Bundle();
-        intent.putExtra("patient", bundle);
+        bundle.putParcelable("doctor",doctor);
+        intent.putExtra("doctor", bundle);
         startActivityForResult(intent, REQUEST_CODE.ADD_PATIENT_ACTIVITY);
     }
     /**
@@ -414,11 +419,9 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
      * 下拉刷新成功的操作
      */
     @Override
-    public void refreshDataOnSuccess(List data) {
+    public void refreshDataOnSuccess(Object data) {
         this.list.clear();
-        for (Object patient:data) {
-            this.list.add((Patient) patient);
-        }
+        LogUtil.I(mContext,data.toString());
         patientAdapter.notifyDataSetChanged();
         refreshLayout.finishRefresh(true);
     }

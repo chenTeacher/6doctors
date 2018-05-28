@@ -49,6 +49,8 @@
             android:id="@+id/patient_name"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
             android:background="@drawable/bg_edittext"
             android:textSize="24sp" />
         <TextView
@@ -83,6 +85,8 @@
             android:id="@+id/patient_phone"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
             android:background="@drawable/bg_edittext"
             android:textSize="24sp" />
         <TextView
@@ -118,8 +122,26 @@
             android:id="@+id/patient_card"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
             android:background="@drawable/bg_edittext"
             android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="证件:"
+            android:textAlignment="textEnd"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/identityType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_style2"
+            android:text="请选择" />
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -165,6 +187,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
+            android:maxLines="1"
+            android:singleLine="true"
             android:background="@drawable/bg_edittext"
             android:textSize="24sp" />
     </LinearLayout>

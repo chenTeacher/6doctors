@@ -1,5 +1,6 @@
 package cn.android.a6doctors.model;
 
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.factory.APIFactoryImpl;
 
 /**
@@ -12,7 +13,7 @@ public class LoginImpl implements LoginModel {
         apiFactory = APIFactoryImpl.getInstance();
     }
     @Override
-    public void login() {
-
+    public void login(String account, String password,final CallBack callback) {
+        apiFactory.login(account,password,callback);
     }
 }
