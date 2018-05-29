@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -34,6 +39,7 @@ import cn.android.a6doctors.adapter.Patient_Case_Collection_Adapter;
 
 import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.bean.PatientItem;
 import cn.android.a6doctors.bean.Patient_Case;
 import cn.android.a6doctors.bean.Patient_Case_Collection;
 import cn.android.a6doctors.model.IManagementImpl;
@@ -46,6 +52,8 @@ import cn.android.a6doctors.view.AddPatientActivity;
 import cn.android.a6doctors.view.AddPatientCaseActivity;
 import cn.android.a6doctors.view.SeePatientActivity;
 import cn.android.a6doctors.view.SeePatientCaseActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -133,7 +141,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     private IManagementPresenter presenter;
     private OnFragmentInteractionListener mListener;
 
-    private List<Patient> list = new ArrayList<Patient>();
+    private List<PatientItem> list = new ArrayList<PatientItem>();
     private List<Patient_Case_Collection> infolist = new ArrayList<Patient_Case_Collection>();
     PatientAdapter patientAdapter;
     Patient_Case_Collection_Adapter patientInfoAdapter;
@@ -245,7 +253,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         patientAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int data) {
-//                presenter.getPatientInfo();
+                presenter.getPatientInfo(list.get(data).getPatientId());
             }
         });
         patientListView.setAdapter(patientAdapter);
@@ -331,31 +339,30 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
 
     /**
      * 显示患者的信息
-     * @param patient_case   获取的患者数据
+     * @param patient   获取的患者数据
      */
     @Override
-    public void showPatientInfo(Patient_Case patient_case) {
-        patient_name.setText(patient_case.getPatient_name());
-        patient_count.setText(patient_case.getPatient_case_collections().size()+"份诊疗记录");
-        patient_sex.setText(patient_case.getPatient_sex());
-        patient_age.setText(patient_case.getPatient_age()+"岁");
-        patient_age.setText(patient_case.getPatient_age()+"岁");
-        patient_native_place.setText(patient_case.getNative_place());
-        patient_id.setText(patient_case.getPatient_id());
-        patient_disease_state.setText(patient_case.getPatient_disease()+"-"+patient_case.getPatient_state());
-        first_time.setText(patient_case.getFirst_time());
-        first_doctor.setText(patient_case.getFirst_doctor());
-        last_doctor.setText(patient_case.getLast_doctor());
-        last_time.setText(patient_case.getLast_time());
+    public void showPatientInfo(Patient patient) {
+        patient_name.setText(patient.getPatientName());
+        patient_count.setText(0+"份诊疗记录");
+        patient_sex.setText(patient.getGender());
+        patient_age.setText(patient.getAge()+"岁");
+        patient_native_place.setText(patient.getPlace());
+        patient_id.setText(patient.getPatientId().toString());
+        patient_disease_state.setText("结石"+"-"+"出诊");
+        first_time.setText("2018-05-30");
+        first_doctor.setText(doctor.getDepartName());
+        last_doctor.setText(doctor.getDepartName());
+        last_time.setText("2018-05-30");
         Glide.with(mContext)
-                .load(patient_case.getPatient_portrait())
+                .load(patient.getPhotoPath())
                 .placeholder(R.drawable.main_person_image)//图片加载出来前，显示的图片
                 .error(R.drawable.main_person_image)//图片加载失败后，显示的图片
                 .into(patient_portrait);
         this.infolist.clear();
-        for (Object patientInfo:patient_case.getPatient_case_collections()) {
-            this.infolist.add((Patient_Case_Collection) patientInfo);
-        }
+//        for (Object patientInfo:patient_case.getPatient_case_collections()) {
+//            this.infolist.add((Patient_Case_Collection) patientInfo);
+//        }
         patientInfoAdapter.notifyDataSetChanged();
     }
     /**
@@ -422,6 +429,14 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     public void refreshDataOnSuccess(Object data) {
         this.list.clear();
         LogUtil.I(mContext,data.toString());
+        JsonArray array = new JsonParser().parse(data.toString()).getAsJsonArray();
+        Gson gson = new GsonBuilder()
+                //配置你的Gson
+                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                .create();
+        for (final JsonElement elem : array) {
+            list.add(gson.fromJson(elem, PatientItem.class));
+        }
         patientAdapter.notifyDataSetChanged();
         refreshLayout.finishRefresh(true);
     }
@@ -436,20 +451,29 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
      * 上拉加载成功的操作
      */
     @Override
-    public void loadMoreDataOnSuccess(List data) {
+    public void loadMoreDataOnSuccess(Object data) {
+        if(data ==null){
+            refreshLayout.setEnableLoadMore(false);
+        }else{
+
 
         int positionStart = this.list.size();
-        int itemCount = data.size();
+        JsonArray array = new JsonParser().parse(data.toString()).getAsJsonArray();
+        Gson gson = new GsonBuilder()
+                //配置你的Gson
+                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                .create();
+        int itemCount = array.size();
         if(itemCount == 0){
             refreshLayout.setEnableLoadMore(false);
         }else {
-            for (Object patient:data) {
-                this.list.add((Patient) patient);
+            for (final JsonElement elem : array) {
+                list.add(gson.fromJson(elem, PatientItem.class));
             }
             patientAdapter.notifyItemRangeInserted(positionStart,itemCount);
-
         }
         refreshLayout.finishLoadMore(true);//传入false表示加载失败
+        }
     }
     /**
      * 上拉加载失败的操作
@@ -483,5 +507,17 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode){
+                case REQUEST_CODE.ADD_PATIENT_ACTIVITY:
+                    this.presenter.refreshData();
+                    break;
+            }
+        }
     }
 }
