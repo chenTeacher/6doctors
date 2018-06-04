@@ -27,4 +27,10 @@ public interface AddPatientCaseView {
      * 保存信息
      */
     void save();
+    /**
+     * 保存信息
+     */
+    void saveOnSuccess();
+    void saveOnFailure();
 }
+

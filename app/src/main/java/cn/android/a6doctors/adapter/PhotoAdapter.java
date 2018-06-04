@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -15,39 +14,26 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.android.a6doctors.R;
-import cn.android.a6doctors.bean.Patient;
-import cn.android.a6doctors.bean.PatientItem;
+import cn.android.a6doctors.bean.Photo;
 
 /**
- * Created by ChenTeacher on 2018/5/13.
+ * Created by ChenTeacher on 2018/6/4.
  */
 
-public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> {
-    private int resourceId;
-    private List<PatientItem> data;
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+    private List<Photo> data;
     private Context mContext;
+
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
-    public PatientAdapter(Context context, List<PatientItem> data) {
-        this.mContext = context;
-        this.data = data;
-//        this.mOnItemClickListener = mListener;
-
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.patient_disease_state)
-        TextView patient_disease_state;
-        @BindView(R.id.patient_intention)
-        TextView patient_intention;
-        @BindView(R.id.patient_name)
-        TextView patient_name;
-        @BindView(R.id.person_image)
-        ImageView personImage;
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this,view);
-            view.setOnClickListener(this);
+        @BindView(R.id.photo_item)
+        ImageView photoItem;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -59,23 +45,25 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
         }
     }
 
+    public PhotoAdapter(List<Photo> data, Context mContext) {
+        this.data = data;
+        this.mContext = mContext;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_patient, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.patient_name.setText(data.get(position).getPatientName());
-        holder.patient_disease_state.setText(data.get(position).getStatus());
-        holder.patient_intention.setText(data.get(position).getPatientIntention());
         Glide.with(mContext)
-                .load(data.get(position).getPatientAvatar())
+                .load(data.get(position).getCasePath())
                 .placeholder(R.drawable.main_person_image)//图片加载出来前，显示的图片
                 .error(R.drawable.main_person_image)//图片加载失败后，显示的图片
-                .into(holder.personImage);
+                .into(holder.photoItem);
     }
 
     @Override
@@ -91,5 +79,4 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
-
 }

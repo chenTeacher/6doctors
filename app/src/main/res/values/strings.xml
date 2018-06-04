@@ -6,4 +6,5 @@
     <string name="first_doctor">首次就诊</string>
     <string name="last_doctor">最近就诊</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_photo">PhotoActivity</string>
 </resources>

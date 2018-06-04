@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/patient_name"
-            android:layout_width="100dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/add_patient_name"
             android:layout_alignBottom="@+id/add_patient_name"
@@ -69,6 +69,7 @@
             android:textStyle="bold" />
 
         <Button
+
             android:id="@+id/patient_state"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -76,6 +77,7 @@
             android:text="请选择" />
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView6"
@@ -85,6 +87,7 @@
             android:textStyle="bold" />
 
         <Button
+            android:visibility="gone"
             android:id="@+id/patient_doctor"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

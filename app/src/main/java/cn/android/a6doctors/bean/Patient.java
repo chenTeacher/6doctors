@@ -130,6 +130,29 @@ public class Patient implements Parcelable {
         this.photoPath = photoPath;
     }
 
+    public String hasNull(){
+        if(this.patientName == null&&this.patientName.length()>0){
+            return "请填写患者姓名";
+        }else if(this.gender == null){
+            return "请选择性别";
+        }else if(this.mobPhone == null&&this.mobPhone.length()>0){
+            return "请填写手机号";
+        }else if( this.age == null){
+            return  "请选择年龄";
+        }else if(this.identityType == null){
+            return "请选择证件类型";
+        }else if(this.identityNum == null&&this.identityNum.length()>0){
+            return "请填写证件号";
+        }else if(this.address == null){
+            return "请选择地址";
+        }else if(this.place == null){
+            return "请填写详细地址";
+        }else if(this.photoPath == null){
+            return "请选择照片";
+        }
+        return null;
+    }
+
     @Override
     public int describeContents() {
         return 0;

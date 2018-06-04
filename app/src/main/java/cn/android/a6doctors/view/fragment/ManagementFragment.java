@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
@@ -39,9 +41,9 @@ import cn.android.a6doctors.adapter.Patient_Case_Collection_Adapter;
 
 import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.bean.PatientInfo;
 import cn.android.a6doctors.bean.PatientItem;
-import cn.android.a6doctors.bean.Patient_Case;
-import cn.android.a6doctors.bean.Patient_Case_Collection;
+import cn.android.a6doctors.bean.TherapieItem;
 import cn.android.a6doctors.model.IManagementImpl;
 import cn.android.a6doctors.presenter.IManagementPresenter;
 import cn.android.a6doctors.util.AppSharePreferenceMgr;
@@ -142,9 +144,11 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     private OnFragmentInteractionListener mListener;
 
     private List<PatientItem> list = new ArrayList<PatientItem>();
-    private List<Patient_Case_Collection> infolist = new ArrayList<Patient_Case_Collection>();
-    PatientAdapter patientAdapter;
-    Patient_Case_Collection_Adapter patientInfoAdapter;
+    private List<TherapieItem> infolist = new ArrayList<TherapieItem>();
+    private PatientAdapter patientAdapter;
+    private Patient_Case_Collection_Adapter patientInfoAdapter;
+
+    private Patient patient;
 
 
     private String token;
@@ -321,7 +325,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         patientInfoAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int data) {
-                if(view.getId()==R.id.patient_case_collection_button) presenter.seeDiagnosisInfo();
+                if(view.getId()==R.id.patient_case_collection_button) presenter.seeDiagnosisInfo(infolist.get(data).getTherapyId());
             }
         });
         patient_Case_Collection_ListView.setAdapter(patientInfoAdapter);
@@ -339,30 +343,48 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
 
     /**
      * 显示患者的信息
-     * @param patient   获取的患者数据
+     * @param data   获取的患者详细数据
      */
     @Override
-    public void showPatientInfo(Patient patient) {
-        patient_name.setText(patient.getPatientName());
-        patient_count.setText(0+"份诊疗记录");
-        patient_sex.setText(patient.getGender());
-        patient_age.setText(patient.getAge()+"岁");
-        patient_native_place.setText(patient.getPlace());
-        patient_id.setText(patient.getPatientId().toString());
-        patient_disease_state.setText("结石"+"-"+"出诊");
-        first_time.setText("2018-05-30");
-        first_doctor.setText(doctor.getDepartName());
-        last_doctor.setText(doctor.getDepartName());
-        last_time.setText("2018-05-30");
+    public void showPatient(Object data) {
+        LogUtil.I(mContext,data.toString());
+        Gson gson=  new GsonBuilder()
+                        //配置你的Gson
+                        .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                        .create();
+        PatientInfo patientInfo = new Gson().fromJson((JsonObject)data, PatientInfo.class);
+
+        patient_name.setText(patientInfo.getPatientName());
+        patient_count.setText(patientInfo.getTherapyCount()+"份诊疗记录");
+        patient_sex.setText(patientInfo.getGender());
+        patient_age.setText(patientInfo.getAge()+"岁");
+        patient_native_place.setText(patientInfo.getAddress());
+        patient_id.setText(Integer.toString(patientInfo.getPatientId()));
+        patient_disease_state.setText(patientInfo.getLastState());
+        first_time.setText(patientInfo.getFirstTherapyDate());
+        first_doctor.setText(patientInfo.getFirstTherapyDoctor());
+        last_time.setText(patientInfo.getLastTherapyDate());
+        last_doctor.setText(patientInfo.getLastTherapyDoctor());
+        patient = new Patient(  patientInfo.getPatientId(),
+                                patientInfo.getPatientName(),
+                                patientInfo.getGender(),
+                                patientInfo.getMobPhone(),
+                                patientInfo.getAge(),
+                                patientInfo.getIdentityType(),
+                                patientInfo.getIdentityNum(),
+                                patientInfo.getAddress(),
+                                patientInfo.getPlace(),
+                                patientInfo.getAvatar());
+
         Glide.with(mContext)
-                .load(patient.getPhotoPath())
+                .load(patientInfo.getAvatar())
                 .placeholder(R.drawable.main_person_image)//图片加载出来前，显示的图片
                 .error(R.drawable.main_person_image)//图片加载失败后，显示的图片
                 .into(patient_portrait);
         this.infolist.clear();
-//        for (Object patientInfo:patient_case.getPatient_case_collections()) {
-//            this.infolist.add((Patient_Case_Collection) patientInfo);
-//        }
+        if(patientInfo.getTherapies() !=null){
+            this.infolist.addAll(patientInfo.getTherapies());
+        }
         patientInfoAdapter.notifyDataSetChanged();
     }
     /**
@@ -370,10 +392,17 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
      */
     @Override
     public void seePatientInfo() {
-        Intent intent = new Intent(this.mContext, SeePatientActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtra("patient", bundle);
-        startActivityForResult(intent, REQUEST_CODE.SEE_PATIENT_ACTIVITY);
+        if(patient == null){
+            Toast.makeText(mContext,"请先选择一个患者",Toast.LENGTH_LONG).show();
+        }else{
+            Intent intent = new Intent(this.mContext, SeePatientActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("patient",patient);
+            bundle.putParcelable("doctor",doctor);
+            intent.putExtra("bundle", bundle);
+            startActivityForResult(intent, REQUEST_CODE.SEE_PATIENT_ACTIVITY);
+        }
+
     }
     /**
      * 添加患者信息
@@ -391,19 +420,27 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
      * */
     @Override
     public void addDiagnosisInfo() {
-        Intent intent = new Intent(this.mContext, AddPatientCaseActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtra("patient", bundle);
-        startActivityForResult(intent, REQUEST_CODE.ADD_PATIENT_CASE_ACTIVITY);
+        if(patient == null){
+            Toast.makeText(mContext,"请先选择一个患者",Toast.LENGTH_LONG).show();
+        }else{
+            Intent intent = new Intent(this.mContext, AddPatientCaseActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("patient",patient);
+            bundle.putParcelable("doctor",doctor);
+            intent.putExtra("bundle", bundle);
+            startActivityForResult(intent, REQUEST_CODE.ADD_PATIENT_CASE_ACTIVITY);
+        }
+
     }
     /**
      * 查看患者病例
      * */
     @Override
-    public void seeDiagnosisInfo() {
+    public void seeDiagnosisInfo(int therapyId) {
         Intent intent = new Intent(this.mContext, SeePatientCaseActivity.class);
         Bundle bundle = new Bundle();
-        intent.putExtra("patient", bundle);
+        bundle.putInt("therapyId",therapyId);
+        intent.putExtra("bundle", bundle);
         startActivityForResult(intent, REQUEST_CODE.SEE_PATIENT_CASE_ACTIVITY);
     }
     /**
@@ -516,6 +553,27 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
             switch (requestCode){
                 case REQUEST_CODE.ADD_PATIENT_ACTIVITY:
                     this.presenter.refreshData();
+                    if(data.getIntExtra("patientId",-1) !=-1){
+                        presenter.getPatientInfo(data.getIntExtra("patientId",-1));
+                    }
+                    break;
+                case REQUEST_CODE.ADD_PATIENT_CASE_ACTIVITY:
+                    this.presenter.refreshData();
+                    if(data.getIntExtra("patientId",-1) !=-1){
+                        presenter.getPatientInfo(data.getIntExtra("patientId",-1));
+                    }
+                    break;
+                case REQUEST_CODE.SEE_PATIENT_ACTIVITY:
+                    this.presenter.refreshData();
+                    if(data.getIntExtra("patientId",-1) !=-1){
+                        presenter.getPatientInfo(data.getIntExtra("patientId",-1));
+                    }
+                    break;
+                case REQUEST_CODE.SEE_PATIENT_CASE_ACTIVITY:
+                    this.presenter.refreshData();
+                    if(data.getIntExtra("patientId",-1) !=-1){
+                        presenter.getPatientInfo(data.getIntExtra("patientId",-1));
+                    }
                     break;
             }
         }

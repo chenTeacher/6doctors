@@ -3,12 +3,18 @@ package cn.android.a6doctors.presenter;
 import android.content.Context;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.bean.Patient_Case;
 import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.model.IManagementModel;
+import cn.android.a6doctors.util.LogUtil;
 import cn.android.a6doctors.view.fragment.IManagementView;
 
 /**
@@ -38,14 +44,20 @@ public class IManagementPresenter {
         this.iManagementView = iManagementView;
     }
     /**
-     * 获取网络数据获取患者的详细信息
+     * 获取网络数据获取患者的详细信息与列表
      */
-    public void getPatientInfo(){
-        iManagementModel.getPatientInfo("1",new  Patient_Case.CallBack() {
-
+    public void getPatientInfo(int patinetId){
+        iManagementModel.getPatientInfo(token,patinetId,new CallBack() {
             @Override
-            public void onSuccess(Patient_Case patient_case) {
-                iManagementView.showPatientInfo(patient_case);
+            public void onSuccess(Object data) {
+//                LogUtil.I(mContext,data.toString());
+//                Gson gson=  new GsonBuilder()
+//                        //配置你的Gson
+//                        .setDateFormat("yyyy-MM-dd hh:mm:ss")
+//                        .create();
+//                Patient patient = new Gson().fromJson((JsonObject)data, Patient.class);
+                iManagementView.showPatient(data);
+
             }
 
             @Override
@@ -85,8 +97,8 @@ public class IManagementPresenter {
     /**
      *
      */
-    public void seeDiagnosisInfo(){
-        iManagementView.seeDiagnosisInfo();
+    public void seeDiagnosisInfo(int therapyId){
+        iManagementView.seeDiagnosisInfo(therapyId);
     };
     /**
      * 通过二维码搜索患者
@@ -98,7 +110,7 @@ public class IManagementPresenter {
      * 刷新数据
      */
     public void refreshData(){
-        iManagementModel.getPatientList(token,doctorId,new CallBack() {
+        iManagementModel.getPatients(token,doctorId,new CallBack() {
             @Override
             public void onSuccess(Object data) {
                 iManagementView.refreshDataOnSuccess(data);
@@ -121,9 +133,14 @@ public class IManagementPresenter {
         });
 
     }
-    /***/
+    /**
+     * 上拉加载
+     * */
     public void loadMoreData(){
-
-
+        iManagementView.loadMoreDataOnSuccess(null);
     }
+
+
+
+
 }

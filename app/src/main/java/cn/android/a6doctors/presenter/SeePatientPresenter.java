@@ -2,8 +2,15 @@ package cn.android.a6doctors.presenter;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.model.SeePatientModel;
+import cn.android.a6doctors.util.LogUtil;
 import cn.android.a6doctors.view.SeePatientView;
 
 /**
@@ -51,7 +58,12 @@ public class SeePatientPresenter {
     public void  selectAge(){
         iView.selectAge();
     }
-
+    /**
+     * 选择证件类型
+     */
+    public void selectIdentityType(){
+        iView.selectIdentityType();
+    };
     /**
      * 拍照
      */
@@ -63,21 +75,60 @@ public class SeePatientPresenter {
     /**
      * 保存信息
      */
-    public void save(Patient patient) {
-        iMoudel.updataPatient(patient);
-    }
+    public void save(String photo,String token,int patientId,String patientName,String gender,String mobPhone,int age,String identityType,String identityNum,String address,String place) {
+        iMoudel.updatePatient(photo,token,patientId,patientName, gender, mobPhone,age, identityType,identityNum, address, place ,new CallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iView.saveOnSuccess();
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                iView.saveOnFailure();
+            }
+
+            @Override
+            public void onError() {
+                iView.saveOnFailure();
+            }
+
+            @Override
+            public void onComplete() {
+//                iView.saveOnFailure();
+            }
+        });
+    }
     /**
-     * 保存成功
+     *  获取患者信息
      */
-    public void saveOnSuccess(Patient patient) {
+    public  void  getPatient(String token,int patientId){
+        iMoudel.getPatient(token, patientId, new CallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                LogUtil.I(mContext,data.toString());
+                Gson gson=  new GsonBuilder()
+                        //配置你的Gson
+                        .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                        .create();
+                Patient patient = new Gson().fromJson((JsonObject)data, Patient.class);
+                iView.getPatient(patient);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
-    /**
-     * 保存失败
-     */
-    public void saveOnFailure() {
-
-    }
 }

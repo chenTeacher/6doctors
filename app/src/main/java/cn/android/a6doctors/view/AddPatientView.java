@@ -33,5 +33,6 @@ public interface AddPatientView {
     /**
      * 保存信息
      */
-    void save();
+    void saveOnSuccess();
+    void saveOnFailure();
 }

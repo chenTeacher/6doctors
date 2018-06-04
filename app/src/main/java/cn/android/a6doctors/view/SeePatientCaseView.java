@@ -28,4 +28,14 @@ public interface SeePatientCaseView {
      * 保存信息
      */
     void save();
+    /**
+     * 保存信息
+     */
+    void saveOnSuccess();
+    void saveOnFailure();
+    /**
+     * 查看病例详情
+     */
+    void getTherapy(Object data);
+
 }

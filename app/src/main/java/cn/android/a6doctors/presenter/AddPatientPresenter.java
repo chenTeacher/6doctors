@@ -4,6 +4,7 @@ import android.content.Context;
 
 import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.model.AddPatientModel;
 import cn.android.a6doctors.view.AddPatientView;
 
@@ -70,20 +71,28 @@ public class AddPatientPresenter {
      * 保存信息
      */
     public void save(Doctor doctor, String token, Patient patient) {
-        iMoudel.createPatient(doctor,token,patient);
+        iMoudel.createPatient(doctor, token, patient, new CallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                    iView.saveOnSuccess();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                iView.saveOnFailure();
+            }
+
+            @Override
+            public void onError() {
+                iView.saveOnFailure();
+            }
+
+            @Override
+            public void onComplete() {
+//                iView.saveOnFailure();
+            }
+        });
     }
 
-    /**
-     * 保存成功
-     */
-    public void saveOnSuccess(Patient patient) {
 
-    }
-
-    /**
-     * 保存失败
-     */
-    public void saveOnFailure() {
-
-    }
 }

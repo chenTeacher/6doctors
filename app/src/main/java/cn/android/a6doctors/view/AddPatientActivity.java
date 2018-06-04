@@ -1,5 +1,6 @@
 package cn.android.a6doctors.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,8 @@ import cn.android.a6doctors.presenter.AddPatientPresenter;
 import cn.android.a6doctors.util.AddressPickTask;
 import cn.android.a6doctors.util.AppSharePreferenceMgr;
 import cn.android.a6doctors.util.LogUtil;
+import cn.android.a6doctors.util.RESULT_CODE;
+import cn.android.a6doctors.util.WeiboDialogUtils;
 
 /**
  * 添加患者信息Activity
@@ -82,6 +85,7 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
 
     private String token;
     private Doctor doctor;
+    private Dialog  mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,13 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
         doctor = getIntent().getBundleExtra("doctor").getParcelable("doctor");
         initView();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+    }
     /*初始化组件*/
     @Override
     public void initView() {
@@ -245,8 +255,18 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
     }
 
     @Override
-    public void save() {
+    public void saveOnSuccess() {
+        WeiboDialogUtils.closeDialog(mDialog);
+        Intent intent = new Intent();
+        intent.putExtra("patientId",patient.getPatientId());
+        setResult(RESULT_OK,intent );
+        finish();
+    }
 
+    @Override
+    public void saveOnFailure() {
+            Toast.makeText(this,"添加异常,请重新添加",Toast.LENGTH_LONG).show();
+            WeiboDialogUtils.closeDialog(mDialog);
     }
     private void add_patient_capture() {
         PhotoPickerIntent intent1 = new PhotoPickerIntent(AddPatientActivity.this);
@@ -304,7 +324,12 @@ public class AddPatientActivity extends BaseActivity implements AddPatientView, 
                 patient.setIdentityNum(patientCard.getText().toString());
                 patient.setPlace(patientLocalInfo.getText().toString());
                 LogUtil.I(this, patient.toString());
-                presenter.save(doctor,token,patient);
+                if(patient.hasNull()==null){
+                    mDialog= WeiboDialogUtils.createLoadingDialog(this, "正在添加");
+                    presenter.save(doctor,token,patient);
+                }else {
+                    Toast.makeText(this,patient.hasNull(),Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }

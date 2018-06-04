@@ -21,13 +21,12 @@ public class IManagementImpl implements IManagementModel{
         apiFactory = APIFactoryImpl.getInstance();
     }
     @Override
-    public void getPatientList(String token,int doctorId,CallBack callback) {
-        apiFactory.getPatientList(token,doctorId,callback);
+    public void getPatients(String token,int doctorId,CallBack callback) {
+        apiFactory.getPatients(token,doctorId,callback);
     }
 
     @Override
-    public void getPatientInfo(final String patientId,final Patient_Case.CallBack callback) {
-        apiFactory.getPatientInfo(patientId,callback);
+    public void getPatientInfo(String token, int patientId, CallBack callBack) {
+        apiFactory.getPatientInfo(token,patientId,callBack);
     }
-
 }

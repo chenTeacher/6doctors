@@ -21,9 +21,9 @@ public interface IManagementView {
      */
     void group();
     /**
-     *   显示单个患者的信息
+     *   显示单个患者的信息与病例列表
      */
-    void showPatientInfo(Patient_Case patient_case);
+    void showPatient(Object object);
     /**
      * 查看患者信息
      */
@@ -39,7 +39,7 @@ public interface IManagementView {
     /**
      * 查看诊疗记录
      */
-    void seeDiagnosisInfo();
+    void seeDiagnosisInfo(int therapyId);
     /**
      * 搜索患者
      */
@@ -59,9 +59,11 @@ public interface IManagementView {
     /**
      * 上拉加载成功的操作
      */
-    void loadMoreDataOnSuccess(List data);
+    void loadMoreDataOnSuccess(Object data);
     /**
      * 上拉加载失败的操作
      */
     void  loadMoreDataOnFailure(String error);
+
+
 }

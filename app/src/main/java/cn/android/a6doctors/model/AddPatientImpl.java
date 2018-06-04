@@ -2,6 +2,7 @@ package cn.android.a6doctors.model;
 
 import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.factory.APIFactoryImpl;
 
 /**
@@ -16,7 +17,7 @@ public class AddPatientImpl implements AddPatientModel {
     }
 
     @Override
-    public void createPatient(Doctor doctor, String token, Patient patient) {
-        apiFactory.createPatient(doctor,token,patient);
+    public void createPatient(Doctor doctor, String token, Patient patient,CallBack callBack) {
+        apiFactory.createPatient(doctor,token,patient,callBack);
     }
 }

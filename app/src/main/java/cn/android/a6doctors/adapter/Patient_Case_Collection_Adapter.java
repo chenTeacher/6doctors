@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.bean.Patient_Case_Collection;
+import cn.android.a6doctors.bean.TherapieItem;
 
 /**
  * Created by ChenTeacher on 2018/5/13.
@@ -23,11 +24,11 @@ import cn.android.a6doctors.bean.Patient_Case_Collection;
 public class Patient_Case_Collection_Adapter extends RecyclerView.Adapter<Patient_Case_Collection_Adapter.ViewHolder>{
 
     private int resourceId;
-    private List<Patient_Case_Collection> data;
+    private List<TherapieItem> data;
     private Context mContext;
     private PatientAdapter.OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
-    public Patient_Case_Collection_Adapter(Context context, List<Patient_Case_Collection> data){
+    public Patient_Case_Collection_Adapter(Context context, List<TherapieItem> data){
         this.mContext = context;
         this.data = data;
     }
@@ -67,11 +68,11 @@ public class Patient_Case_Collection_Adapter extends RecyclerView.Adapter<Patien
     @Override
     public void onBindViewHolder(Patient_Case_Collection_Adapter.ViewHolder holder, final int position) {
 
-        Patient_Case_Collection patient_case_collection = data.get(position);
-        holder.patient_case_collection_doctor.setText(patient_case_collection.getDoctor());
-        holder.patient_case_collection_time.setText(patient_case_collection.getTime());
+        TherapieItem therapieItem = data.get(position);
+        holder.patient_case_collection_doctor.setText(therapieItem.getDoctorName());
+        holder.patient_case_collection_time.setText(therapieItem.getDate().substring(0,10));
         holder.patient_case_collection_number.setText(String.valueOf(position+1));
-        holder.patient_case_collection_cotent.setText(patient_case_collection.getDescribe());
+        holder.patient_case_collection_cotent.setText(therapieItem.getRecord());
         holder.patient_case_collection_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,7 +1,9 @@
 package cn.android.a6doctors.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.foamtrace.photopicker.ImageCaptureManager;
@@ -21,22 +24,28 @@ import com.foamtrace.photopicker.PhotoPreviewActivity;
 import com.foamtrace.photopicker.SelectModel;
 import com.foamtrace.photopicker.intent.PhotoPickerIntent;
 import com.foamtrace.photopicker.intent.PhotoPreviewIntent;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.android.a6doctors.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.addapp.pickers.listeners.OnItemPickListener;
 import cn.addapp.pickers.listeners.OnSingleWheelListener;
 import cn.addapp.pickers.picker.DatePicker;
 import cn.addapp.pickers.picker.SinglePicker;
+import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
+import cn.android.a6doctors.bean.Therapy;
 import cn.android.a6doctors.model.SeePatientCaseImpl;
 import cn.android.a6doctors.presenter.SeePatientCasePresenter;
+import cn.android.a6doctors.util.AppSharePreferenceMgr;
+import cn.android.a6doctors.util.REQUEST_CODE;
+import cn.android.a6doctors.util.WeiboDialogUtils;
 
 /**
  * Created by ChenTeacher on 2017/12/4.
@@ -59,32 +68,51 @@ public class SeePatientCaseActivity extends BaseActivity implements SeePatientCa
     Button save;
     @BindView(R.id.close_btn)
     ImageButton closeBtn;
+    @BindView(R.id.see_photo)
+    ImageButton seePhoto;
 
     private int columnWidth;
     private ArrayList<String> imagePaths = null;
-    private SeePatientCaseActivity.GridAdapter gridAdapter;
+    private GridAdapter gridAdapter;
 
     private ImageCaptureManager captureManager; // 相机拍照处理类
     private static final int REQUEST_CAMERA_CODE = 112;
     private static final int REQUEST_PREVIEW_CODE = 113;
     SeePatientCasePresenter presenter;
 
+    private String token;
+    private int therapyId;
+    private Therapy therapy;
+    private Dialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_case_patient);
         ButterKnife.bind(this);
+        token = (String) AppSharePreferenceMgr.get(this, "token", "");
+        therapyId = getIntent().getBundleExtra("bundle").getInt("therapyId");
         presenter = new SeePatientCasePresenter(new SeePatientCaseImpl(), this, this);
+        presenter.getTherapy(token, therapyId);
         initView();
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+    }
+
+    @Override
     public void initView() {
-        patientName.setText("万小明");
         closeBtn.setOnClickListener(this);
         patientDoctor.setOnClickListener(this);
         patientState.setOnClickListener(this);
         casePatientTime.setOnClickListener(this);
+        seePhoto.setOnClickListener(this);
+        save.setOnClickListener(this);
         setImage();
         loadAdpater(new ArrayList<String>());
     }
@@ -130,6 +158,27 @@ public class SeePatientCaseActivity extends BaseActivity implements SeePatientCa
                 break;
             case R.id.case_patient_time:
                 presenter.selectTime();
+                break;
+            case R.id.save:
+                mDialog = WeiboDialogUtils.createLoadingDialog(this, "正在修改");
+                presenter.updateTherapy(token,
+                        therapy.getTherapyId(),
+                        imagePaths, therapy.getDoctorId(),
+                        therapy.getPatientId(),
+                        patientState.getText().toString(),
+                        casePatientTime.getText().toString(),
+                        casePatientContent.getText().toString());
+                break;
+            case R.id.see_photo:
+                if(therapy.getPhotos() !=null&&therapy.getPhotos().size()>0){
+                    Intent intent = new Intent(this,PhotoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("photos", (ArrayList<? extends Parcelable>) therapy.getPhotos());
+                    intent.putExtra("bundle", bundle);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, "暂无病例图集", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
 
@@ -178,7 +227,7 @@ public class SeePatientCaseActivity extends BaseActivity implements SeePatientCa
         imagePaths.clear();
         imagePaths.addAll(paths);
         if (gridAdapter == null) {
-            gridAdapter = new SeePatientCaseActivity.GridAdapter(imagePaths);
+            gridAdapter = new GridAdapter(imagePaths);
             gv.setAdapter(gridAdapter);
         } else {
             gridAdapter.notifyDataSetChanged();
@@ -265,8 +314,8 @@ public class SeePatientCaseActivity extends BaseActivity implements SeePatientCa
         picker.setWheelModeEnable(true);
         picker.setTopPadding(15);
         picker.setRangeStart(1900, 1, 1);
-        picker.setRangeEnd(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        picker.setRangeEnd(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DATE));
+        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DATE));
         picker.setWeightEnable(true);
         picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
             @Override
@@ -297,6 +346,35 @@ public class SeePatientCaseActivity extends BaseActivity implements SeePatientCa
     @Override
     public void save() {
 
+    }
+
+    @Override
+    public void saveOnSuccess() {
+        WeiboDialogUtils.closeDialog(mDialog);
+        Intent intent = new Intent();
+        intent.putExtra("patientId", therapy.getPatientId());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void saveOnFailure() {
+        Toast.makeText(this, "修改异常,请重新添加", Toast.LENGTH_LONG).show();
+        WeiboDialogUtils.closeDialog(mDialog);
+    }
+
+
+    @Override
+    public void getTherapy(Object data) {
+        Gson gson = new GsonBuilder()
+                //配置你的Gson
+                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                .create();
+        therapy = gson.fromJson((JsonObject) data, Therapy.class);
+        patientName.setText(therapy.getPatientName());
+        patientState.setText(therapy.getState());
+        casePatientContent.setText(therapy.getRecord());
+        casePatientTime.setText(therapy.getDate());
     }
 
     private class GridAdapter extends BaseAdapter {

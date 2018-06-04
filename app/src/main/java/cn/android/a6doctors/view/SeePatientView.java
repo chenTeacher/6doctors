@@ -1,5 +1,8 @@
 package cn.android.a6doctors.view;
 
+import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.callback.CallBack;
+
 /**
  * Created by ChenTeacher on 2018/5/14.
  */
@@ -23,11 +26,20 @@ public interface SeePatientView {
      */
     void selectAddress();
     /**
+     * 选择证件类型
+     */
+    void selectIdentityType();
+    /**
      * 拍照
      */
     void photoSelector();
     /**
      * 保存信息
      */
-    void save();
+    void saveOnSuccess();
+    void saveOnFailure();
+    /**
+     * 查询患者信息
+     */
+    void getPatient(Patient patient);
 }

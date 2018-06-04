@@ -30,6 +30,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.BufferedSink;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,9 +99,11 @@ public class APIFactoryImpl implements APIFactory {
                     }else if(code ==404){
                         callBack.onFailure("账号不存在");
 
+                    }else{
+                        callBack.onError();
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    callBack.onError();
                 }finally {
                     callBack.onComplete();
                 }
@@ -117,7 +120,7 @@ public class APIFactoryImpl implements APIFactory {
     }
 
     @Override
-    public void getPatientList(String token , int doctorId, final CallBack callBack) {
+    public void getPatients(String token, int doctorId, final CallBack callBack) {
         Call<ResponseBody> call = apiService.getPatients(token,doctorId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -135,11 +138,13 @@ public class APIFactoryImpl implements APIFactory {
                             callBack.onFailure(msg);
                         }
 
-                    }else if(code ==404){
+                    }else{
                         callBack.onFailure("请求异常");
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
                 }
 
             }
@@ -151,40 +156,89 @@ public class APIFactoryImpl implements APIFactory {
         });
     }
 
-
     @Override
-    public void getPatientInfo(String patientId, final Patient_Case.CallBack callBack) {
-//        Call<ResponseBody> call = apiService.getPatientInfo(patientId);
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                try {
-//                    Patient_Case patient_case = new Patient_Case();
-//                    JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-//                    patient_case = gson.fromJson(jsonObject, Patient_Case.class);
-//
-//                    callBack.onSuccess(patient_case);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                callBack.onFailure("");
-//            }
-//        });
+    public void getPatient(String token, int patientId,final CallBack callBack) {
+        Call<ResponseBody> call = apiService.getPatient(token,patientId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+
+                    }else{
+                        callBack.onFailure("请求异常");
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onFailure("");
+            }
+        });
     }
 
     @Override
-    public void createPatient(Doctor doctor, String token, Patient patient) {
+    public void getPatientInfo(String token,int patientId, final CallBack callBack) {
+        Call<ResponseBody> call = apiService.getPatientInfo(token,patientId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+
+                    }else{
+                        callBack.onFailure("请求异常");
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onFailure("");
+            }
+        });
+    }
+
+    @Override
+    public void createPatient(Doctor doctor, String token, Patient patient, final CallBack callBack) {
         doctor.getDoctorId();
         String path =patient.getPhotoPath(); // "/storage/emulated/0/Pictures/1477553156332.jpg";
-        File file = new File(path);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("img", file.getName(), requestFile);
-
+        File file = null;
+        MultipartBody.Part body = null;
+        if(!path.contains("http://")){
+            file =  new File(path);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+        }
         Map<String,Object> params = new HashMap<String,Object>();
         params.put("token",token);
         params.put("doctorId",doctor.getDoctorId());
@@ -201,15 +255,281 @@ public class APIFactoryImpl implements APIFactory {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    System.out.println(response.body().string());
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void updatePatient(String photo, String token, int patientId, String patientName, String gender, String mobPhone, int age, String identityType, String identityNum, String address, String place, final CallBack callBack) {
+        String path =photo; // "/storage/emulated/0/Pictures/1477553156332.jpg";
+        File file = null;
+        MultipartBody.Part body = null;
+        if(!path.contains("http://")){
+            file =  new File(path);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+        }else{
+            RequestBody requestFile = RequestBody.create(MediaType.parse(""), "");
+            body = MultipartBody.Part.createFormData("", "");
+        }
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("patientId",patientId);
+        params.put("patientName",patientName);
+        params.put("gender",gender);
+        params.put("mobPhone",mobPhone);
+        params.put("age", age);
+        params.put("identityType",identityType);
+        params.put("identityNum",identityNum);
+        params.put("address",address);
+        params.put("place",place);
+        Call call = apiService.updatePatient(params, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void createTherapy(String token,List<String> photos, int doctorId, int patientId, String state, String date, String record,final CallBack callBack) {
+        Map<String, RequestBody> files=  new HashMap<String, RequestBody>();
+        File file;
+        if(photos.size()>0 == false){
+            RequestBody requestBody = RequestBody.create(MediaType.parse(""),"");
+            files.put("", requestBody);
+        }
+        for(int i = 0; i < photos.size(); i++) {
+            file  = new File(photos.get(i));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            files.put("photos\"; filename=\"" + file.getName() + "", requestBody);
+        }
+        for(int i = 0; i < photos.size(); i++) {
+            file  = new File(photos.get(i));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            files.put("photos\"; filename=\"" + file.getName() + "", requestBody);
+        }
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("patientId",patientId);
+        params.put("doctorId",doctorId);
+        params.put("state",state);
+        params.put("date",date);
+        params.put("record", record);
+        Call call = apiService.createTherapy(params, files);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+
+    }
+
+    @Override
+    public void getTherapies(String token, int patientId,final CallBack callBack) {
+        Call<ResponseBody> call = apiService.getTherapies(token,patientId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonArray data = jsonObject.get("data").getAsJsonArray();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+
+                    }else{
+                        callBack.onFailure("请求异常");
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void getTherapy(String token, int therapyId,final CallBack callBack) {
+        Call<ResponseBody> call = apiService.getTherapy(token,therapyId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+
+                    }else{
+                        callBack.onFailure("请求异常");
+                    }
+                } catch (IOException e) {
+                   callBack.onError();
+                }finally {
+                    callBack.onComplete();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+            }
+        });
+    }
+
+    @Override
+    public void updateTherapy(String token, int therapyId, List<String> photos, int doctorId, int patientId, String state, String date, String record,final CallBack callBack) {
+        Map<String, RequestBody> files=  new HashMap<String, RequestBody>();
+        File file;
+        if(photos.size()>0 == false){
+            RequestBody requestBody = RequestBody.create(MediaType.parse(""),"");
+            files.put("", requestBody);
+        }
+        for(int i = 0; i < photos.size(); i++) {
+            file  = new File(photos.get(i));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            files.put("photos\"; filename=\"" + file.getName() + "", requestBody);
+        }
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("therapyId",therapyId);
+        params.put("patientId",patientId);
+        params.put("doctorId",doctorId);
+        params.put("state",state);
+        params.put("date",date);
+        params.put("record", record);
+        Call call = apiService.updateTherapy(params, files);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
             }
         });
     }

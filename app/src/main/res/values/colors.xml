@@ -11,4 +11,5 @@
     <color name="logoScreenBackground">#F7F7F7</color>
     <color name="colorCursor">#cccccc</color>
     <color name="colorLoginButton">#1296db</color>
+    <color name="photobg">#328a8a8a</color>
 </resources>

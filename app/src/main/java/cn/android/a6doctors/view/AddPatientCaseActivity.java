@@ -1,6 +1,7 @@
 package cn.android.a6doctors.view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.foamtrace.photopicker.ImageCaptureManager;
@@ -35,9 +37,17 @@ import cn.addapp.pickers.picker.DatePicker;
 import cn.addapp.pickers.picker.SinglePicker;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
+import cn.android.a6doctors.bean.Doctor;
+import cn.android.a6doctors.bean.Patient;
+import cn.android.a6doctors.bean.Therapy;
 import cn.android.a6doctors.model.AddPatientCaseImpl;
+import cn.android.a6doctors.model.SeePatientImpl;
 import cn.android.a6doctors.presenter.AddPatientCasePresenter;
 import cn.android.a6doctors.presenter.AddPatientPresenter;
+import cn.android.a6doctors.presenter.SeePatientPresenter;
+import cn.android.a6doctors.util.AppSharePreferenceMgr;
+import cn.android.a6doctors.util.RESULT_CODE;
+import cn.android.a6doctors.util.WeiboDialogUtils;
 
 /**
  * 添加患者信息Activity
@@ -67,24 +77,38 @@ public class AddPatientCaseActivity extends BaseActivity implements AddPatientCa
     private ImageCaptureManager captureManager; // 相机拍照处理类
     private static final int REQUEST_CAMERA_CODE = 112;
     private static final int REQUEST_PREVIEW_CODE = 113;
-    AddPatientCasePresenter presenter;
 
+    private AddPatientCasePresenter presenter;
+    private String token;
+    private Doctor doctor;
+    private Patient patient;
+    private Dialog mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_case_patient);
         ButterKnife.bind(this);
         presenter = new AddPatientCasePresenter(new AddPatientCaseImpl(), this, this);
+        token = (String) AppSharePreferenceMgr.get(this,"token","");
+        doctor = getIntent().getBundleExtra("bundle").getParcelable("doctor");
+        patient = getIntent().getBundleExtra("bundle").getParcelable("patient");
         initView();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+    }
     @Override
     public void initView() {
-        patientName.setText("万小明");
+        patientName.setText(patient.getPatientName());
         closeBtn.setOnClickListener(this);
         patientDoctor.setOnClickListener(this);
         patientState.setOnClickListener(this);
         casePatientTime.setOnClickListener(this);
+        save.setOnClickListener(this);
         setImage();
         loadAdpater(new ArrayList<String>());
     }
@@ -130,6 +154,9 @@ public class AddPatientCaseActivity extends BaseActivity implements AddPatientCa
                 break;
             case R.id.case_patient_time:
                 presenter.selectTime();
+                break;
+            case R.id.save:
+                this.save();
                 break;
         }
 
@@ -265,8 +292,8 @@ public class AddPatientCaseActivity extends BaseActivity implements AddPatientCa
         picker.setWheelModeEnable(true);
         picker.setTopPadding(15);
         picker.setRangeStart(1900, 1, 1);
-        picker.setRangeEnd(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        picker.setRangeEnd(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DATE));
+        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DATE));
         picker.setWeightEnable(true);
         picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
             @Override
@@ -296,7 +323,24 @@ public class AddPatientCaseActivity extends BaseActivity implements AddPatientCa
 
     @Override
     public void save() {
+        mDialog =  WeiboDialogUtils.createLoadingDialog(this,"正在添加");
+        presenter.createTherapy(token,imagePaths,doctor.getDoctorId(),patient.getPatientId(),patientState.getText().toString(),casePatientTime.getText().toString(),casePatientContent.getText().toString());
+    }
 
+    @Override
+    public void saveOnSuccess() {
+        WeiboDialogUtils.closeDialog(mDialog);
+        Intent intent = new Intent();
+        intent.putExtra("patientId",patient.getPatientId());
+        setResult(RESULT_OK,intent );
+        finish();
+
+    }
+
+    @Override
+    public void saveOnFailure() {
+        Toast.makeText(this,"添加异常,请重新添加",Toast.LENGTH_LONG).show();
+        WeiboDialogUtils.closeDialog(mDialog);
     }
 
     private class GridAdapter extends BaseAdapter {
