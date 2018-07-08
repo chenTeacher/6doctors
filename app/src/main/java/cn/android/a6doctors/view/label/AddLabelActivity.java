@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
 import cn.android.a6doctors.callback.CallBack;
+import cn.android.a6doctors.model.Label.AddLabelImpl;
 import cn.android.a6doctors.model.Label.LabelImpl;
 import cn.android.a6doctors.presenter.label.AddLabelPresenter;
 import cn.android.a6doctors.presenter.label.LabelPresenter;
@@ -37,7 +38,7 @@ public class AddLabelActivity extends BaseActivity implements AddLabelView, View
         setContentView(R.layout.activity_add_label);
         ButterKnife.bind(this);
         initView();
-        presenter = new AddLabelPresenter(null, this, this);
+        presenter = new AddLabelPresenter(new AddLabelImpl(), this, this);
         token = (String) AppSharePreferenceMgr.get(this,"token","");
     }
 
@@ -90,28 +91,31 @@ public class AddLabelActivity extends BaseActivity implements AddLabelView, View
                 break;
             case R.id.add_label_btn:
                 Log.i("add_label_btn",addLabelText.getText().toString());
-//                presenter.addLabel(token, addLabelText.getText().toString(), new CallBack() {
-//                    @Override
-//                    public void onSuccess(Object data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String msg) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-//                break;
+                if(addLabelText.getText().toString().length()>0){
+                    presenter.addLabel(token, addLabelText.getText().toString(), new CallBack() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+                }
+                break;
         }
     }
 }

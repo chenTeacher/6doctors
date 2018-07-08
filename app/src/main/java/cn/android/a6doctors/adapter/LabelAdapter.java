@@ -5,9 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -20,7 +19,8 @@ import cn.android.a6doctors.bean.Label;
  * Created by ChenTeacher on 2018/7/7.
  */
 
-public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> {
+public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> implements ItemTouchHelperAdapter {
+
 
     private List<Label> data;
     private Context mContext;
@@ -32,9 +32,27 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public Context getContext() {
+        return mContext;
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+//        Collections.swap(data,fromPosition,toPosition);
+//        notifyItemMoved(fromPosition,toPosition);
+    }
+
+    @Override
+    public void onItemDissmiss(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.label_name)
-        TextView labelName;
+        public TextView labelName;
+        @BindView(R.id.tv_text)
+        public TextView tvText;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -72,8 +90,17 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
 
     }
 
+
     public void setOnItemClickListener(PatientAdapter.OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
+}
+
+interface ItemTouchHelperAdapter {
+    //数据交换
+    void onItemMove(int fromPosition, int toPosition);
+
+    //数据删除
+    void onItemDissmiss(int position);
 }

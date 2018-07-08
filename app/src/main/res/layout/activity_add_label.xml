@@ -44,10 +44,9 @@
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/bg_default_selector"
             android:padding="10dp"
             android:text="确定"
-            android:textColor="#FFFFFF"
+            android:textColor="#90FFFFFF"
             android:textSize="18sp" />
 
     </RelativeLayout>

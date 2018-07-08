@@ -7,7 +7,8 @@
     android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".view.AddPatientActivity">
+    tools:context=".view.AddPatientActivity"
+    android:layout_marginTop="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,5 +60,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/label_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:background="#E9E7E7"
+        ></android.support.v7.widget.RecyclerView>
 </LinearLayout>

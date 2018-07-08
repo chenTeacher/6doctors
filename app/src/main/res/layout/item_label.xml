@@ -3,23 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/bg_default_selector"
-    android:padding="5dp">
+    android:orientation="horizontal"
+    android:background="@drawable/bg_item_patient"
+    >
+
     <TextView
         android:id="@+id/label_name"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/label"
-        android:text="暂无数据"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="暂无数据"
         android:textSize="14sp" />
-    <View
-        android:background="#507c7373"
-        android:layout_width="match_parent"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_height="1dp"/>
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:background="#f33213">
+        <TextView
+            android:id="@+id/tv_text"
+            android:gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
 </LinearLayout>

@@ -116,7 +116,7 @@ public class DoctorAPIFactoryImpl implements DoctorAPIFactory {
                         JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
                         int status = jsonObject.get("status").getAsInt();
                         String msg = jsonObject.get("msg").getAsString();
-                        JsonArray data = jsonObject.get("data").getAsJsonArray();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
                         if (status == 200) {
                             callBack.onSuccess(data);
                         }else{

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,9 +30,11 @@ import cn.android.a6doctors.bean.Label;
 
 import cn.android.a6doctors.model.Label.LabelImpl;
 import cn.android.a6doctors.presenter.label.LabelPresenter;
+import cn.android.a6doctors.ui.SimpleItemTouchHelperCallback;
 import cn.android.a6doctors.util.AppSharePreferenceMgr;
 
 import cn.android.a6doctors.util.REQUEST_CODE;
+import cn.android.a6doctors.util.SpacesItemDecoration;
 
 public class LabelActivity extends BaseActivity implements LabelView,View.OnClickListener {
     List<Label> infolist  = new ArrayList<Label>();
@@ -58,7 +62,6 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
     protected void onStart() {
         super.onStart();
         presenter.findLabelsByDoctorId(token);
-
     }
 
     @Override
@@ -76,6 +79,7 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
         //设置RecyclerView 布局
         labelRv.setLayoutManager(layoutmanager);
+        labelRv.addItemDecoration(new SpacesItemDecoration(1));
         //设置Adapter
         labelAdapter = new LabelAdapter(this,infolist);
         labelAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
@@ -84,6 +88,12 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
             }
         });
         labelRv.setAdapter(labelAdapter);
+        //先实例化Callback
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(labelAdapter);
+        //用Callback构造ItemtouchHelper
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        //调用ItemTouchHelper的attachToRecyclerView方法建立联系
+        touchHelper.attachToRecyclerView(labelRv);
     }
     @Override
     public void goBack() {
@@ -123,4 +133,5 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
                 break;
         }
     }
+
 }
