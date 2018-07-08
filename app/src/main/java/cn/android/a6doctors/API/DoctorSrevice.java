@@ -18,15 +18,22 @@ import retrofit2.http.QueryMap;
 
 public interface DoctorSrevice {
     /**
-     * 更新病例
+     * 查询分组
      * @param params
      */
     @POST("/doctor/findLabelsByDoctorId?")
     Call<ResponseBody> findLabelsByDoctorId(@QueryMap Map<String,Object> params);
     /**
-     * 更新病例
+     * 添加分组
      * @param params
      */
     @POST("/doctor/addLabel?")
     Call<ResponseBody> addLabel(@QueryMap Map<String,Object> params);
+
+    /**
+     * 删除分组
+     * @param params
+     */
+    @POST("/doctor/delLabel?")
+    Call<ResponseBody> delLabel(@QueryMap Map<String,Object> params);
 }

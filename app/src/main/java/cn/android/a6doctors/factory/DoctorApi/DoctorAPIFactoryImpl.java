@@ -140,4 +140,43 @@ public class DoctorAPIFactoryImpl implements DoctorAPIFactory {
         });
     }
 
+    @Override
+    public void delLabel(String token, int labelId,final CallBack callBack) {
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("labelId",labelId);
+        Call call = apiService.delLabel(params);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
 }

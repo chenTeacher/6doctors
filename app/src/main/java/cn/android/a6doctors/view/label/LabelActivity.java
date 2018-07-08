@@ -82,9 +82,16 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
         labelRv.addItemDecoration(new SpacesItemDecoration(1));
         //设置Adapter
         labelAdapter = new LabelAdapter(this,infolist);
-        labelAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
+        labelAdapter.setOnItemClickListener(new LabelAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int data) {
+                Intent intent = new Intent(LabelActivity.this,SeeLabelActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void delLabel(int position) {
+                presenter.delLabel(token,infolist.get(position));
             }
         });
         labelRv.setAdapter(labelAdapter);
@@ -95,6 +102,7 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
         //调用ItemTouchHelper的attachToRecyclerView方法建立联系
         touchHelper.attachToRecyclerView(labelRv);
     }
+
     @Override
     public void goBack() {
         finish();
@@ -119,6 +127,12 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
         for (final JsonElement elem : array) {
             infolist.add(gson.fromJson(elem, Label.class));
         }
+        labelAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void delLabel(Label label) {
+        infolist.remove(label);
         labelAdapter.notifyDataSetChanged();
     }
 

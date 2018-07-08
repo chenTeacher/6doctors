@@ -46,9 +46,9 @@
             android:name=".view.PhotoActivity"
             android:label="@string/title_activity_photo" />
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2" />
-        <activity android:name=".base.Main2Activity" />
+            android:name=".view.label.SeeLabelActivity"
+            android:label="SeeLabelActivity" />
+
         <activity
             android:name=".view.label.LabelActivity"
             android:label="@string/title_activity_label" />

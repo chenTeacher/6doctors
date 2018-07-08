@@ -21,6 +21,10 @@ public interface DoctorAPIFactory {
      * 添加分组
      */
     void addLabel(String token,String name,CallBack callBack);
+    /**
+     * 添加分组
+     */
+    void delLabel(String token,int labelId,CallBack callBack);
 
 
 }

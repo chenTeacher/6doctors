@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import cn.android.a6doctors.bean.Label;
 import cn.android.a6doctors.bean.Patient;
 import cn.android.a6doctors.callback.CallBack;
 import cn.android.a6doctors.model.AddPatientCaseModel;
@@ -64,5 +65,29 @@ public class LabelPresenter {
             }
         });
     }
+    public void delLabel(String token, final Label label){
+        iMoudel.delLabel(token, label, new CallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iView.delLabel(label);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    };
+
 
 }

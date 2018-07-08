@@ -12,8 +12,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.android.a6doctors.API.DoctorSrevice;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.bean.Label;
+import cn.android.a6doctors.view.label.LabelActivity;
 
 /**
  * Created by ChenTeacher on 2018/7/7.
@@ -24,7 +26,7 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
 
     private List<Label> data;
     private Context mContext;
-    private PatientAdapter.OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    private LabelAdapter.OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public LabelAdapter(Context context, List<Label> data) {
         this.mContext = context;
@@ -38,14 +40,17 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
+
 //        Collections.swap(data,fromPosition,toPosition);
 //        notifyItemMoved(fromPosition,toPosition);
     }
 
     @Override
     public void onItemDissmiss(int position) {
-        data.remove(position);
-        notifyItemRemoved(position);
+        if(mOnItemClickListener != null){
+            mOnItemClickListener.delLabel(position);
+        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -87,11 +92,12 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int data);
+        void delLabel(int position);
 
     }
 
 
-    public void setOnItemClickListener(PatientAdapter.OnRecyclerViewItemClickListener listener) {
+    public void setOnItemClickListener(LabelAdapter.OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
