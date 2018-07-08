@@ -23,8 +23,7 @@ public class PhotoViewPager extends ViewPager {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            //uncomment if you really want to see these errors
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }

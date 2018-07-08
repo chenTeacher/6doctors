@@ -8,18 +8,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/selector_tab_background_state_pressed"
+        android:background="@color/nav_bar"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:gravity="center_vertical"
+        >
 
         <ImageButton
             android:id="@+id/close_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/close"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_default_selector"
+            android:src="@drawable/close"
             android:padding="10dp" />
 
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="查看病例图集"
@@ -36,9 +39,15 @@
         android:layout_height="72dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="29dp"></android.support.v7.widget.RecyclerView>
-    <uk.co.senab.photoview.PhotoView
-        android:id="@+id/photo_info"
+
+    <cn.android.a6doctors.ui.PhotoViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="match_parent" />
+
+        <!--<uk.co.senab.photoview.PhotoView-->
+            <!--android:id="@+id/photo_info"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginTop="10dp"/>-->
 </LinearLayout>

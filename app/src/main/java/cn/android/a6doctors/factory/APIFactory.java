@@ -56,4 +56,6 @@ public interface APIFactory {
      * 更新病例
      */
     void updateTherapy(String token,int therapyId,List<String> photos,int doctorId,int patientId,String state,String date,String record,CallBack callBack);
+
+
 }

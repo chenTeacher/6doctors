@@ -107,6 +107,12 @@ public class IManagementPresenter {
         iManagementView.searchPatientForZXing();
     };
     /**
+     * 患者分组
+     */
+    public void patientLabel(){
+        iManagementView.patientLabel();
+    };
+    /**
      * 刷新数据
      */
     public void refreshData(){

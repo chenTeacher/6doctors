@@ -11,18 +11,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/selector_tab_background_state_pressed"
+        android:background="@color/nav_bar"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:gravity="center_vertical"
+        >
 
         <ImageButton
             android:id="@+id/close_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/close"
-            android:padding="10dp" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_default_selector"
+            android:src="@drawable/close" />
 
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="添加诊疗记录"
@@ -73,7 +75,7 @@
             android:id="@+id/patient_state"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:text="请选择" />
 
         <TextView
@@ -91,7 +93,7 @@
             android:id="@+id/patient_doctor"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:text="请选择" />
 
     </LinearLayout>
@@ -117,7 +119,7 @@
             android:layout_width="240dp"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:maxLength="11"
             android:text="请选择" />
     </LinearLayout>
@@ -165,7 +167,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="病例:"
+            android:text="病历:"
             android:textAlignment="textEnd"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -189,7 +191,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="117dp"
             android:layout_marginRight="117dp"
-            android:background="@drawable/button_style1"
+            android:background="@drawable/bg_button_selector1"
             android:text="添加"
             android:textColor="@color/result_text" />
     </LinearLayout>

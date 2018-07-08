@@ -7,4 +7,10 @@
     <string name="last_doctor">最近就诊</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_photo">PhotoActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">暂无该功能</string>
+    <string name="title_activity_label">LabelActivity</string>
+    <string name="title_activity_add_label">AddLabelActivity</string>
 </resources>

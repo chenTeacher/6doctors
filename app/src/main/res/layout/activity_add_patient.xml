@@ -12,18 +12,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/selector_tab_background_state_pressed"
+        android:background="@color/nav_bar"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:gravity="center_vertical"
+        >
 
         <ImageButton
             android:id="@+id/close_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/close"
-            android:padding="10dp" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_default_selector"
+            android:src="@drawable/close"
+            />
 
         <TextView
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="添加患者"
@@ -66,7 +69,7 @@
             android:id="@+id/patient_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:text="请选择" />
     </LinearLayout>
     <LinearLayout
@@ -102,7 +105,7 @@
             android:id="@+id/patient_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:text="请选择" />
     </LinearLayout>
     <LinearLayout
@@ -140,7 +143,7 @@
             android:id="@+id/identityType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style2"
+            android:background="@drawable/bg_button_selector2"
             android:text="请选择" />
     </LinearLayout>
     <LinearLayout
@@ -163,7 +166,7 @@
             android:layout_alignBaseline="@+id/add_patient_local"
             android:layout_alignBottom="@+id/add_patient_local"
             android:layout_toEndOf="@+id/add_patient_local"
-            android:background="@drawable/button_style1"
+            android:background="@drawable/bg_button_selector1"
             android:text=" 选择"
             android:textColor="@color/result_text" />
 
@@ -213,6 +216,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_toEndOf="@+id/textView"
+            android:scaleType="fitXY"
             android:src="@drawable/main_person_image" />
 
         <Button
@@ -220,7 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="58dp"
-            android:background="@drawable/button_style1"
+            android:background="@drawable/bg_button_selector1"
             android:text="拍照"
             android:textColor="@color/result_text" />
     </LinearLayout>
@@ -236,7 +240,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="117dp"
             android:layout_marginRight="117dp"
-            android:background="@drawable/button_style1"
+            android:background="@drawable/bg_button_selector1"
             android:text="添加"
             android:textColor="@color/result_text" />
     </LinearLayout>

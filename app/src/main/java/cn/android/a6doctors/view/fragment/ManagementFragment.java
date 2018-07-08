@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ import cn.android.a6doctors.view.AddPatientActivity;
 import cn.android.a6doctors.view.AddPatientCaseActivity;
 import cn.android.a6doctors.view.SeePatientActivity;
 import cn.android.a6doctors.view.SeePatientCaseActivity;
+import cn.android.a6doctors.view.label.LabelActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -76,13 +79,15 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     @BindView(R.id.main_patient_case_collection_info_list_view)
     protected RecyclerView patient_Case_Collection_ListView;//患者就诊信息列表
     @BindView(R.id.main_patient_add)
-    protected ImageView patient_add;//添加患者
+    protected LinearLayout patient_add;//添加患者
     @BindView(R.id.intent_add_case)
     protected ImageView intent_add_case;//添加病例
     @BindView(R.id.intent_see_patient)
     protected ImageView intent_see_patient;//查看编辑患者信息
     @BindView(R.id.main_scanBtn)
-    protected ImageView main_scanBtn;//扫一扫
+    protected LinearLayout main_scanBtn;//扫一扫
+    @BindView(R.id.main_label)
+    protected LinearLayout main_label;//扫一扫
 
     /**
      * 患者姓名
@@ -183,19 +188,19 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("ManagementFragment","onCreateView");
         if (mCacheView == null) {
             mCacheView = inflater.inflate(R.layout.fragment_management, container, false);
+            ButterKnife.bind(this, mCacheView);
+            initView(mCacheView);
+            presenter = new IManagementPresenter(mContext, new IManagementImpl(), this);
+            presenter.setDoctorId(doctor.getDoctorId());
+            presenter.setToken(token);
         }
-        ButterKnife.bind(this, mCacheView);
         ViewGroup parent = (ViewGroup) mCacheView.getParent();
         if (parent != null) {
             parent.removeView(mCacheView);
         }
-
-        initView(mCacheView);
-        presenter = new IManagementPresenter(mContext, new IManagementImpl(), this);
-        presenter.setDoctorId(doctor.getDoctorId());
-        presenter.setToken(token);
         return mCacheView;
 
     }
@@ -235,7 +240,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         intent_add_case.setOnClickListener(this);
         intent_see_patient.setOnClickListener(this);
         main_scanBtn.setOnClickListener(this);
-
+        main_label.setOnClickListener(this);
         setPatientListView();
         setPatientInfoListView();
 
@@ -249,7 +254,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         LinearLayoutManager layoutmanager = new LinearLayoutManager(mContext);
         //设置RecyclerView 布局
         patientListView.setLayoutManager(layoutmanager);
-        patientListView.addItemDecoration(new SpacesItemDecoration(5));
+        patientListView.addItemDecoration(new SpacesItemDecoration(1));
 
         //设置Adapter
         patientAdapter = new PatientAdapter(mContext,list);
@@ -331,17 +336,6 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         patient_Case_Collection_ListView.setAdapter(patientInfoAdapter);
     }
     /**
-     * 患者分组
-     */
-    @Override
-    public void group() {
-        LogUtil.I(mContext, "group");
-    }
-
-
-
-
-    /**
      * 显示患者的信息
      * @param data   获取的患者详细数据
      */
@@ -353,13 +347,12 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
                         .setDateFormat("yyyy-MM-dd hh:mm:ss")
                         .create();
         PatientInfo patientInfo = new Gson().fromJson((JsonObject)data, PatientInfo.class);
-
         patient_name.setText(patientInfo.getPatientName());
         patient_count.setText(patientInfo.getTherapyCount()+"份诊疗记录");
         patient_sex.setText(patientInfo.getGender());
         patient_age.setText(patientInfo.getAge()+"岁");
         patient_native_place.setText(patientInfo.getAddress());
-        patient_id.setText(Integer.toString(patientInfo.getPatientId()));
+        patient_id.setText("No."+Integer.toString(patientInfo.getPatientId()));
         patient_disease_state.setText(patientInfo.getLastState());
         first_time.setText(patientInfo.getFirstTherapyDate());
         first_doctor.setText(patientInfo.getFirstTherapyDoctor());
@@ -492,8 +485,6 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         if(data ==null){
             refreshLayout.setEnableLoadMore(false);
         }else{
-
-
         int positionStart = this.list.size();
         JsonArray array = new JsonParser().parse(data.toString()).getAsJsonArray();
         Gson gson = new GsonBuilder()
@@ -521,6 +512,15 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     }
 
     @Override
+    public void patientLabel() {
+        Intent intent = new Intent(this.mContext, LabelActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("doctor",doctor);
+        intent.putExtra("doctor", bundle);
+        startActivityForResult(intent, REQUEST_CODE.PATIENT_LABEL);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             //添加患者
@@ -538,6 +538,9 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
             //通过二维码搜索患者
             case R.id.main_scanBtn:
                 presenter.searchPatientForZXing();
+                break;
+            case R.id.main_label:
+                presenter.patientLabel();
                 break;
         }
     }

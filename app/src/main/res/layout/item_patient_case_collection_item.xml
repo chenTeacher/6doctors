@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="18dp"
         android:layout_marginTop="26dp"
-        android:background="@drawable/file" />
+        android:background="@drawable/bg_default_selector"
+        android:src="@drawable/file" />
 
         <TextView
             android:id="@+id/patient_case_collection_time"

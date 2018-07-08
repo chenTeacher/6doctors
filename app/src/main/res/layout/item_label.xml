@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_default_selector"
+    android:padding="5dp">
+    <TextView
+        android:id="@+id/label_name"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/label"
+        android:text="暂无数据"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="14sp" />
+    <View
+        android:background="#507c7373"
+        android:layout_width="match_parent"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp"/>
+</LinearLayout>

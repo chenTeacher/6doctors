@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/logoScreenBackground"
     android:orientation="horizontal"
     tools:context="cn.android.a6doctors.view.fragment.ManagementFragment">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:background="#E9E7E7"
         android:layout_weight="1.5"
         android:orientation="vertical">
 
@@ -20,90 +21,122 @@
             android:text="@string/patient_management"
             android:textAllCaps="true"
             android:textSize="@dimen/title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
-        <LinearLayout
+        <View
+            android:background="#907c7373"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/main_patient_add"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/main_add" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="添加"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/main_group" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="分组"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-        </LinearLayout>
+            android:layout_height="1dp"/>
 
         <LinearLayout
+            android:id="@+id/main_patient_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_default_selector"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:paddingLeft="5dp">
 
-            <EditText
-                android:layout_marginLeft="5dp"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="3"
-                android:drawableRight="@drawable/search"
-                android:background="@drawable/bg_edittext"
-                android:hint=""
-                android:textSize="18dp" />
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/main_add" />
 
-            <ImageButton
-                android:id="@+id/main_scanBtn"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/zximg" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="添加患者"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
+        <View
+            android:background="#507c7373"
+            android:layout_width="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:id="@+id/main_label"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_default_selector"
+            android:paddingLeft="5dp">>
 
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/main_group" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="5dp"
+                android:text="患者分组"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <View
+            android:background="#507c7373"
+            android:layout_width="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:id="@+id/main_scanBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_default_selector"
+            android:paddingLeft="5dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/zximg" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="5dp"
+                android:text="扫一扫"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <View
+            android:background="#907c7373"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="患者列表"
+            android:textAllCaps="true"
+            android:textSize="@dimen/title"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_search"
+                android:drawableLeft="@drawable/search"
+                android:hint="搜索"
+                android:textSize="12dp" />
+        </LinearLayout>
         <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
@@ -121,7 +154,8 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:orientation="vertical"
-        android:padding="10dp">
+       >
+
         <android.support.v7.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
@@ -129,6 +163,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="3dp"
             app:cardElevation="8dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -142,7 +177,10 @@
                         android:id="@+id/main_patient_image"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/main_person_image" />
 
                     <LinearLayout
@@ -150,8 +188,8 @@
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
                         android:layout_toEndOf="@+id/main_patient_image"
-                        android:layout_marginLeft="25dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -187,7 +225,8 @@
                         android:layout_height="50dp"
                         android:layout_alignBottom="@+id/main_patient_image"
                         android:layout_alignStart="@+id/intent_see_patient"
-                        android:background="@drawable/main_query_case" />
+                        android:background="@drawable/bg_default_selector"
+                        android:src="@drawable/main_query_case" />
                     <!--查看编辑患者信息-->
                     <ImageButton
                         android:id="@+id/intent_see_patient"
@@ -195,120 +234,129 @@
                         android:layout_height="50dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignTop="@+id/main_patient_image"
-                        android:background="@drawable/main_add_case" />
+                        android:background="@drawable/bg_default_selector"
+                        android:src="@drawable/main_add_case" />
                 </RelativeLayout>
+
                 <TextView
-                    android:background="#aba5a5"
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_margin="5dp"
-                    android:layout_height="1dp" />
-        <TableLayout
-            android:id="@+id/patient_case2"
-            android:layout_width="match_parent"
-            android:layout_height="120dp">
-            <TableRow android:layout_weight="1">
-
-                <TextView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:layout_weight="1"
-                    android:text="No." />
-
+                    android:background="#aba5a5" />
                 <TextView
                     android:id="@+id/patient_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/no_data_num"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </TableRow>
-
-            <TableRow android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/patient_sex"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/no_data" />
-
-                <TextView
-                    android:id="@+id/patient_age"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    />
+                <TableLayout
+                    android:id="@+id/patient_case2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
+                    android:layout_height="120dp"
+                    >
+                    <TableRow android:layout_weight="1"
+                        android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/patient_native_place"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
-            </TableRow>
+                        <TextView
+                            android:id="@+id/patient_sex"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                        <TextView
+                            android:id="@+id/patient_age"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                        <TextView
+                            android:id="@+id/patient_native_place"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/no_data" />
+                    </TableRow>
 
 
-            <TableRow
-                android:layout_weight="1"
-                android:gravity="center_vertical">
+                    <TableRow
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/first_doctor" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/first_doctor"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
-                <TextView
-                    android:id="@+id/first_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
+                        <TextView
+                            android:id="@+id/first_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
-                <TextView
-                    android:id="@+id/first_doctor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
-            </TableRow>
+                        <TextView
+                            android:id="@+id/first_doctor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+                    </TableRow>
 
-            <TableRow android:layout_weight="1">
+                    <TableRow android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        >
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/last_doctor" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/last_doctor"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
-                <TextView
-                    android:id="@+id/last_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
+                        <TextView
+                            android:id="@+id/last_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
-                <TextView
-                    android:id="@+id/last_doctor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_data" />
-            </TableRow>
-        </TableLayout>
+                        <TextView
+                            android:id="@+id/last_doctor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/no_data"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+                    </TableRow>
+                </TableLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/main_patient_case_collection_info_list_view"
             android:layout_width="match_parent"

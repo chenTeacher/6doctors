@@ -17,10 +17,6 @@ public interface IManagementView {
      */
     void initView(View view);
     /**
-     * 患者分组
-     */
-    void group();
-    /**
      *   显示单个患者的信息与病例列表
      */
     void showPatient(Object object);
@@ -64,6 +60,9 @@ public interface IManagementView {
      * 上拉加载失败的操作
      */
     void  loadMoreDataOnFailure(String error);
-
+    /**
+     * 患者分组
+     */
+    void  patientLabel();
 
 }

@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_item_patient"
-    android:elevation="3dp"
     android:padding="5dp">
 
     <ImageView
@@ -14,6 +13,7 @@
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/main_person_image" />
 
     <TextView

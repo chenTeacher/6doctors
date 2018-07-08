@@ -15,8 +15,9 @@ import cn.android.a6doctors.R;
 import cn.android.a6doctors.base.BaseActivity;
 import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.view.fragment.ManagementFragment;
+import cn.android.a6doctors.view.fragment.MessageFragment;
 
-public class MainActivity extends BaseActivity implements ManagementFragment.OnFragmentInteractionListener{
+public class MainActivity extends BaseActivity implements ManagementFragment.OnFragmentInteractionListener,MessageFragment.OnFragmentInteractionListener{
     //定义FragmentTabHost对象
     private FragmentTabHost mTabHost;
 
@@ -24,13 +25,13 @@ public class MainActivity extends BaseActivity implements ManagementFragment.OnF
     private LayoutInflater layoutInflater;
 
     //定义数组来存放Fragment界面
-    private Class fragmentArray[] = {ManagementFragment.class};
+    private Class fragmentArray[] = {ManagementFragment.class,MessageFragment.class,MessageFragment.class,MessageFragment.class};
 
     //定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.tab_home_btn};
+    private int mImageViewArray[] = {R.drawable.tab_home_btn,R.drawable.tab_patient_btn,R.drawable.tab_clinic_btn,R.drawable.tab_message_btn};
 
     //Tab选项卡的文字
-    private String mTextviewArray[] = {"首页"};
+    private String mTextviewArray[] = {"首页","患者","门诊","消息"};
 
     //医生的信息
     private Doctor doctor;
@@ -45,7 +46,6 @@ public class MainActivity extends BaseActivity implements ManagementFragment.OnF
     public void initView() {
         //实例化布局对象
         layoutInflater = LayoutInflater.from(this);
-
         //实例化TabHost对象，得到TabHost
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
