@@ -55,9 +55,9 @@
     <TextView
         android:id="@+id/label_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/label"
+        android:layout_height="50dp"
         android:background="#90FFFFFF"
+        android:paddingLeft="5dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
@@ -93,9 +93,8 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/label_rv"
+        android:id="@+id/patient_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E9E7E7"
-        ></android.support.v7.widget.RecyclerView>
+        android:background="#E9E7E7"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

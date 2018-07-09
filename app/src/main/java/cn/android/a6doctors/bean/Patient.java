@@ -12,7 +12,7 @@ import java.util.List;
 public class Patient implements Parcelable {
 
 
-    //患者id
+        //患者id
         private Integer patientId;
         //患者姓名
         private String patientName;
@@ -32,12 +32,14 @@ public class Patient implements Parcelable {
         private String place;
         //照片地址
         private String photoPath;
+        //label
+        private List<Labels> labels;
 
 
     public Patient() {
     }
 
-    public Patient(Integer patientId, String patientName, String gender, String mobPhone, Integer age, String identityType, String identityNum, String address, String place, String photoPath) {
+    public Patient(Integer patientId, String patientName, String gender, String mobPhone, Integer age, String identityType, String identityNum, String address, String place, String photoPath, List<Labels> labels) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.gender = gender;
@@ -48,6 +50,7 @@ public class Patient implements Parcelable {
         this.address = address;
         this.place = place;
         this.photoPath = photoPath;
+        this.labels = labels;
     }
 
     public Integer getPatientId() {
@@ -153,6 +156,30 @@ public class Patient implements Parcelable {
         return null;
     }
 
+    public List<Labels> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Labels> labels) {
+        this.labels = labels;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "patientId=" + patientId +
+                ", patientName='" + patientName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", mobPhone='" + mobPhone + '\'' +
+                ", age=" + age +
+                ", identityType='" + identityType + '\'' +
+                ", identityNum='" + identityNum + '\'' +
+                ", address='" + address + '\'' +
+                ", place='" + place + '\'' +
+                ", photoPath='" + photoPath + '\'' +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -170,6 +197,7 @@ public class Patient implements Parcelable {
         dest.writeString(this.address);
         dest.writeString(this.place);
         dest.writeString(this.photoPath);
+        dest.writeTypedList(this.labels);
     }
 
     protected Patient(Parcel in) {
@@ -183,9 +211,10 @@ public class Patient implements Parcelable {
         this.address = in.readString();
         this.place = in.readString();
         this.photoPath = in.readString();
+        this.labels = in.createTypedArrayList(Labels.CREATOR);
     }
 
-    public static final Parcelable.Creator<Patient> CREATOR = new Parcelable.Creator<Patient>() {
+    public static final Creator<Patient> CREATOR = new Creator<Patient>() {
         @Override
         public Patient createFromParcel(Parcel source) {
             return new Patient(source);
@@ -196,19 +225,4 @@ public class Patient implements Parcelable {
             return new Patient[size];
         }
     };
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "patientId=" + patientId +
-                ", patientName='" + patientName + '\'' +
-                ", gender='" + gender + '\'' +
-                ", mobPhone='" + mobPhone + '\'' +
-                ", age=" + age +
-                ", identityType='" + identityType + '\'' +
-                ", identityNum='" + identityNum + '\'' +
-                ", address='" + address + '\'' +
-                ", place='" + place + '\'' +
-                ", photoPath='" + photoPath + '\'' +
-                '}';
-    }
 }

@@ -22,9 +22,24 @@ public interface DoctorAPIFactory {
      */
     void addLabel(String token,String name,CallBack callBack);
     /**
-     * 添加分组
+     * 删除分组
      */
     void delLabel(String token,int labelId,CallBack callBack);
+    /**
+     *查看标签（分组）中的所有患者
+     */
+    void findByLabelId(String token,int labelId,CallBack callBack);
+    /**
+     *给病人添加已经存在标签（分组）
+     */
+    void addLabelPatients(String token, List<Integer> patientsId, int labelId, CallBack callBack);
+    /**
+     * 移除患者
+     */
+    void delLabelPatient(String token,int labelId,int patientId,CallBack callback);
 
-
+    /**
+     * 修改标签名称
+     */
+    void updateLabel(String token,String name,int labelId,CallBack callback);
 }

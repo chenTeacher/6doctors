@@ -50,12 +50,6 @@ public class IManagementPresenter {
         iManagementModel.getPatientInfo(token,patinetId,new CallBack() {
             @Override
             public void onSuccess(Object data) {
-//                LogUtil.I(mContext,data.toString());
-//                Gson gson=  new GsonBuilder()
-//                        //配置你的Gson
-//                        .setDateFormat("yyyy-MM-dd hh:mm:ss")
-//                        .create();
-//                Patient patient = new Gson().fromJson((JsonObject)data, Patient.class);
                 iManagementView.showPatient(data);
 
             }

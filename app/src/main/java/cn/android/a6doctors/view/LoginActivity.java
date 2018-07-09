@@ -100,6 +100,7 @@ public class LoginActivity extends BaseActivity implements LoginView,View.OnClic
         String token = data1.get("token").getAsString();
         AppSharePreferenceMgr.put(this,"token",token);
         Doctor doctor = new Gson().fromJson(data1.get("data").getAsJsonObject(), Doctor.class);
+        AppSharePreferenceMgr.put(this,"doctorId",doctor.getDoctorId());
         Intent intent = new Intent(this,MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("doctor",doctor);

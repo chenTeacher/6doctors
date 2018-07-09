@@ -48,13 +48,18 @@
         <activity
             android:name=".view.label.SeeLabelActivity"
             android:label="SeeLabelActivity" />
-
         <activity
             android:name=".view.label.LabelActivity"
             android:label="@string/title_activity_label" />
         <activity
             android:name=".view.label.AddLabelActivity"
-            android:label="@string/title_activity_add_label"></activity>
+            android:label="@string/title_activity_add_label" />
+        <activity
+            android:name=".view.label.AddLabelPatientsActivity"
+            android:label="@string/title_activity_add_label_patients" />
+        <activity
+            android:name=".view.label.SeeInfoActivity"
+            android:label="@string/title_activity_see_info"></activity>
     </application>
 
 </manifest>

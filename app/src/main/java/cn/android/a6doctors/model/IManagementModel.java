@@ -19,18 +19,5 @@ public interface IManagementModel {
      */
     void getPatientInfo(String token,int patientId,CallBack callBack);
 
-//    /**
-//     * 获取患者的详细信息
-//     * @param patinetId 患者的Id编码
-//     */
-//    void getPatientInfo(String token,int patinetId,CallBack callback);
-//
-//    /**
-//     * 获取患者的病例的列表
-//     * @param token
-//     * @param patientId
-//     * @param callback
-//     */
-//    void getTherapies(String token, int patientId, CallBack callback);
 
 }

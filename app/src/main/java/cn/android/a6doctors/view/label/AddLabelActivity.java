@@ -62,6 +62,7 @@ public class AddLabelActivity extends BaseActivity implements AddLabelView, View
                 Log.e("afterTextChanged",editable.length()+"");
                 if(editable.length()>0){
                     addLabelBtn.setTextColor(Color.parseColor("#FFFFFF"));
+                    addLabelBtn.setOnClickListener(AddLabelActivity.this);
                 }else{
                     addLabelBtn.setTextColor(Color.parseColor("#90FFFFFF"));
                     addLabelBtn.setOnClickListener(null);

@@ -26,6 +26,7 @@ import cn.android.a6doctors.R;
 import cn.android.a6doctors.adapter.LabelAdapter;
 import cn.android.a6doctors.adapter.PatientAdapter;
 import cn.android.a6doctors.base.BaseActivity;
+import cn.android.a6doctors.bean.Doctor;
 import cn.android.a6doctors.bean.Label;
 
 import cn.android.a6doctors.model.Label.LabelImpl;
@@ -48,6 +49,7 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
     @BindView(R.id.label_rv)
     RecyclerView labelRv;
     private String token;
+    private Doctor doctor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
         initView();
         presenter = new LabelPresenter(new LabelImpl(), this, this);
         token = (String) AppSharePreferenceMgr.get(this,"token","");
+        doctor =  getIntent().getBundleExtra("bundle").getParcelable("doctor");
     }
 
     @Override
@@ -86,7 +89,11 @@ public class LabelActivity extends BaseActivity implements LabelView,View.OnClic
             @Override
             public void onItemClick(View view, int data) {
                 Intent intent = new Intent(LabelActivity.this,SeeLabelActivity.class);
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("label",infolist.get(data));
+                bundle.putParcelable("doctor",doctor);
+                intent.putExtra("bundle", bundle);
+                startActivityForResult(intent, REQUEST_CODE.PATIENT_LABEL_SEE);
             }
 
             @Override

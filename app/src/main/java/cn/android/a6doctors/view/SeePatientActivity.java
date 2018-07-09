@@ -85,7 +85,6 @@ public class SeePatientActivity extends BaseActivity implements SeePatientView, 
     private ImageCaptureManager captureManager; // 相机拍照处理类
 
     private String token;
-    private Doctor doctor;
     private Patient patient;
     private Dialog mDialog;
 
@@ -96,7 +95,6 @@ public class SeePatientActivity extends BaseActivity implements SeePatientView, 
         ButterKnife.bind(this);
         presenter = new SeePatientPresenter(new SeePatientImpl(), this, this);
         token = (String) AppSharePreferenceMgr.get(this,"token","");
-        doctor = getIntent().getBundleExtra("bundle").getParcelable("doctor");
         patient = getIntent().getBundleExtra("bundle").getParcelable("patient");
         initView();
         presenter.getPatient(token,patient.getPatientId());

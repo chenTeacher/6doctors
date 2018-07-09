@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/create_user_dialog_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="200dp"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:gravity="center"
+        android:background="@color/nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="修改分组名称"
+        android:textColor="@color/logoScreenBackground"/>
+
+    <EditText
+        android:id="@+id/dialog_edit"
+        android:layout_margin="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edittext"
+        android:minHeight="45dp"
+        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_selector2"
+            android:text="取消" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="40dp"></View>
+
+        <Button
+            android:id="@+id/btn_comfirm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_selector1"
+            android:text="确定" />
+    </LinearLayout>
+</LinearLayout>

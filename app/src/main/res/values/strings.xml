@@ -13,4 +13,6 @@
     <string name="hello_blank_fragment">暂无该功能</string>
     <string name="title_activity_label">LabelActivity</string>
     <string name="title_activity_add_label">AddLabelActivity</string>
+    <string name="title_activity_add_label_patients">AddLabelPatientsActivity</string>
+    <string name="title_activity_see_info">SeeInfoActivity</string>
 </resources>

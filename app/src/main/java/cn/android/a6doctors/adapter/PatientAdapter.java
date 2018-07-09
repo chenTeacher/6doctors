@@ -22,7 +22,7 @@ import cn.android.a6doctors.bean.PatientItem;
  * Created by ChenTeacher on 2018/5/13.
  */
 
-public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> {
+public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> implements ItemTouchHelperAdapter{
     private int resourceId;
     private List<PatientItem> data;
     private Context mContext;
@@ -33,6 +33,18 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
         this.data = data;
 //        this.mOnItemClickListener = mListener;
 
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+
+    }
+
+    @Override
+    public void onItemDissmiss(int position) {
+        if(mOnItemClickListener != null){
+            mOnItemClickListener.delLabel(position);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,6 +97,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int data);
+        void delLabel(int position);
 
     }
 

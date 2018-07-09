@@ -87,7 +87,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
     @BindView(R.id.main_scanBtn)
     protected LinearLayout main_scanBtn;//扫一扫
     @BindView(R.id.main_label)
-    protected LinearLayout main_label;//扫一扫
+    protected LinearLayout main_label;//
 
     /**
      * 患者姓名
@@ -264,6 +264,11 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
             public void onItemClick(View view, int data) {
                 presenter.getPatientInfo(list.get(data).getPatientId());
             }
+
+            @Override
+            public void delLabel(int position) {
+
+            }
         });
         patientListView.setAdapter(patientAdapter);
 
@@ -332,6 +337,11 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
             public void onItemClick(View view, int data) {
                 if(view.getId()==R.id.patient_case_collection_button) presenter.seeDiagnosisInfo(infolist.get(data).getTherapyId());
             }
+
+            @Override
+            public void delLabel(int position) {
+
+            }
         });
         patient_Case_Collection_ListView.setAdapter(patientInfoAdapter);
     }
@@ -341,7 +351,6 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
      */
     @Override
     public void showPatient(Object data) {
-        LogUtil.I(mContext,data.toString());
         Gson gson=  new GsonBuilder()
                         //配置你的Gson
                         .setDateFormat("yyyy-MM-dd hh:mm:ss")
@@ -367,7 +376,8 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
                                 patientInfo.getIdentityNum(),
                                 patientInfo.getAddress(),
                                 patientInfo.getPlace(),
-                                patientInfo.getAvatar());
+                                patientInfo.getAvatar(),
+                                 null);
 
         Glide.with(mContext)
                 .load(patientInfo.getAvatar())
@@ -516,7 +526,7 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
         Intent intent = new Intent(this.mContext, LabelActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("doctor",doctor);
-        intent.putExtra("doctor", bundle);
+        intent.putExtra("bundle", bundle);
         startActivityForResult(intent, REQUEST_CODE.PATIENT_LABEL);
     }
 

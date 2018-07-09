@@ -1,65 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/bg_item_patient"
-    android:padding="5dp">
+    >
 
-    <ImageView
-        android:id="@+id/person_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/main_person_image" />
-
-    <TextView
-        android:id="@+id/patient_name"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/person_image"
-        android:paddingBottom="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:text="暂无数据"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textSize="14sp" />
+        android:padding="5dp">
 
-    <TextView
-        android:id="@+id/patient_disease_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/patient_name"
-        android:layout_below="@+id/patient_name"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:paddingBottom="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:text="暂无数据"
-        android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/person_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/main_person_image" />
 
-    <TextView
-        android:id="@+id/patient_intention"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/patient_disease_state"
-        android:layout_below="@+id/patient_disease_state"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:paddingBottom="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:text="暂无数据"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/patient_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/person_image"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:text="暂无数据"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="14sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/patient_disease_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/patient_name"
+            android:layout_below="@+id/patient_name"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:text="暂无数据"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/patient_intention"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/patient_disease_state"
+            android:layout_below="@+id/patient_disease_state"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:text="暂无数据"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:background="#f33213">
+        <TextView
+            android:id="@+id/tv_text"
+            android:gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+</LinearLayout>

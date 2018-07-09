@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.android.a6doctors.API.APIService;
@@ -146,6 +147,162 @@ public class DoctorAPIFactoryImpl implements DoctorAPIFactory {
         params.put("token",token);
         params.put("labelId",labelId);
         Call call = apiService.delLabel(params);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void findByLabelId(String token, int labelId,final CallBack callBack) {
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("labelId",labelId);
+        Call call = apiService.findByLabelId(params);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonArray data = jsonObject.get("data").getAsJsonArray();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void addLabelPatients(String token, List<Integer> patientsId, int labelId,final CallBack callBack) {
+
+        Call call = apiService.addLabelPatients(token,labelId,patientsId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonArray data = jsonObject.get("data").getAsJsonArray();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void delLabelPatient(String token, int labelId, int patientId,final CallBack callBack) {
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("labelId",labelId);
+        params.put("patientId",patientId);
+        Call call = apiService.delLabelPatient(params);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    int code = response.code();
+                    if (code == 200) {
+                        JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                        int status = jsonObject.get("status").getAsInt();
+                        String msg = jsonObject.get("msg").getAsString();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+                        if (status == 200) {
+                            callBack.onSuccess(data);
+                        }else{
+                            callBack.onFailure(msg);
+                        }
+                    }else{
+                        callBack.onError();
+                    }
+                } catch (IOException e) {
+                    callBack.onError();
+                }finally {
+                    callBack.onComplete();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callBack.onError();
+                callBack.onComplete();
+            }
+        });
+    }
+
+    @Override
+    public void updateLabel(String token, String name, int labelId,final CallBack callBack) {
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("token",token);
+        params.put("name",name);
+        params.put("labelId",labelId);
+        Call call = apiService.updateLabel(params);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

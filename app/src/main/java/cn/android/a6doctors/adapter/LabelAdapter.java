@@ -5,17 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.android.a6doctors.API.DoctorSrevice;
 import cn.android.a6doctors.R;
 import cn.android.a6doctors.bean.Label;
-import cn.android.a6doctors.view.label.LabelActivity;
 
 /**
  * Created by ChenTeacher on 2018/7/7.
@@ -101,12 +98,4 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.ViewHolder> 
         this.mOnItemClickListener = listener;
     }
 
-}
-
-interface ItemTouchHelperAdapter {
-    //数据交换
-    void onItemMove(int fromPosition, int toPosition);
-
-    //数据删除
-    void onItemDissmiss(int position);
 }
