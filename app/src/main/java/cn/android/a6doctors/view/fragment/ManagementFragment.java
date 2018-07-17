@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rohit.recycleritemclicksupport.RecyclerItemClickSupport;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -258,20 +259,51 @@ public class ManagementFragment extends Fragment implements IManagementView, Vie
 
         //设置Adapter
         patientAdapter = new PatientAdapter(mContext,list);
-
-        patientAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
+        RecyclerItemClickSupport.addTo(patientListView).setOnItemClickListener(new RecyclerItemClickSupport.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int data) {
-                presenter.getPatientInfo(list.get(data).getPatientId());
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // do something
+                presenter.getPatientInfo(list.get(position).getPatientId());
             }
-
+        }).setOnItemLongClickListener(new RecyclerItemClickSupport.OnItemLongClickListener() {
             @Override
-            public void delLabel(int position) {
-
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                Toast.makeText(mContext, "onLongClick", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
-        patientListView.setAdapter(patientAdapter);
+//        patientAdapter.setOnItemClickListener(new PatientAdapter.OnRecyclerViewItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, final int data) {
+//
+//                view.setOnLongClickListener(new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View view) {
+//
+//                        return false;
+//                    }
+//                });
+//                view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        presenter.getPatientInfo(list.get(data).getPatientId());
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void delLabel(int position) {
+//
+//            }
+//        });
 
+        patientListView.setAdapter(patientAdapter);
+//        ItemClickSupport.addTo(patientListView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//            @Override
+//            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                // do something
+//            }
+//        });
         //设置 Header
         refreshLayout.setRefreshHeader(new ClassicsHeader(mContext));
         //设置 Footer 为 球脉冲 样式
